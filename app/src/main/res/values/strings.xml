@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Ups and Downs</string>
+    <string name="str1Up">1\nUp</string>
+    <string name="str2Up">2\nUp</string>
+    <string name="str1Down">1\nDown</string>
+    <string name="str2Down">2\nDown</string>
+</resources>
