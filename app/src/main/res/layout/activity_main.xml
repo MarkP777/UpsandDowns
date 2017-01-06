@@ -80,21 +80,23 @@
         android:onClick="onClick" />
 
     <TextView
-        android:text="6 Ups"
+        android:text="0 Up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView"
         android:layout_alignStart="@+id/btn2Down"
         android:textAppearance="@android:style/TextAppearance.Large"
-        android:id="@+id/textView2" />
+        android:id="@+id/textView2"
+        android:textColor="@color/colorUp" />
 
     <TextView
-        android:text="2 Downs"
+        android:text="0 Down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
         android:layout_alignStart="@+id/textView2"
         android:layout_marginTop="16dp"
         android:textAppearance="@android:style/TextAppearance.Large"
-        android:id="@+id/textView3" />
+        android:id="@+id/textView3"
+        android:textColor="@color/colorDown" />
 </android.support.percent.PercentRelativeLayout>
