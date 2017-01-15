@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ConfirmUpsDowns"/>
+        <activity android:name=".ListAll"/>
     </application>
 
 </manifest>
