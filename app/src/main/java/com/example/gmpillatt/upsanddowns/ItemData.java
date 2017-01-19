@@ -10,12 +10,14 @@ public class ItemData {
     private String right;
     private String centre;
     private Integer textColor;
+    private Integer dBId;
 
-    public ItemData(String left, String centre, String right, Integer textColor) {
+    public ItemData(String left, String centre, String right, Integer textColor, Integer dBId) {
         this.left = left;
         this.right = right;
         this.centre = centre;
         this.textColor = textColor;
+        this.dBId = dBId;
     }
 
     /* Set methods not used
@@ -34,7 +36,11 @@ public class ItemData {
     }
 
     public void setTextColor(Integer textColor) {
-        this.textColor = color;
+        this.textColor = textColor;
+    }
+
+    public void setDBId(Integer dBId) {
+        this.dBId = dBId;
     }
     */
 
@@ -54,7 +60,9 @@ public class ItemData {
         return this.textColor;
     }
 
-
+    public Integer getdBId() {
+        return this.dBId;
+    }
 
 
 

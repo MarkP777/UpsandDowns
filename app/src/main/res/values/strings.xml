@@ -1,7 +1,28 @@
 <resources>
     <string name="app_name">Ups and Downs</string>
-    <string name="str1Up">1\nUp</string>
-    <string name="str2Up">2\nUp</string>
-    <string name="str1Down">1\nDown</string>
-    <string name="str2Down">2\nDown</string>
+    <string name="str1Up">1 Up</string>
+    <string name="str2Up">2 Up</string>
+    <string name="str1Down">1 Down</string>
+    <string name="str2Down">2 Down</string>
+    <string name="promptTime">Time</string>
+    <string name="promptDate">Date</string>
+    <string name="separator">|</string>
+    <string name="colon">:</string>
+    <string name="promptDirection">Direction</string>
+    <string name="promptBoats">Number of boats</string>
+    <string name="promptWidebeam">Widebeam</string>
+    <integer-array name="max_days_in_month">
+        <item>31</item>
+        <item>29</item>
+        <item>31</item>
+        <item>30</item>
+        <item>31</item>
+        <item>30</item>
+        <item>31</item>
+        <item>31</item>
+        <item>30</item>
+        <item>31</item>
+        <item>30</item>
+        <item>31</item>
+    </integer-array>
 </resources>

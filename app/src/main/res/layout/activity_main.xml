@@ -87,7 +87,8 @@
         android:layout_alignStart="@+id/btn2Down"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:id="@+id/textView2"
-        android:textColor="@color/colorUp" />
+        android:textColor="@color/colorUp"
+        android:textStyle="normal|bold"/>
 
     <TextView
         android:text="0 Down"
@@ -98,5 +99,6 @@
         android:layout_marginTop="16dp"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:id="@+id/textView3"
-        android:textColor="@color/colorDown" />
+        android:textColor="@color/colorDown"
+        android:textStyle="normal|bold"/>
 </android.support.percent.PercentRelativeLayout>

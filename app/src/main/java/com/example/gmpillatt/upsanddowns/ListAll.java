@@ -2,6 +2,7 @@ package com.example.gmpillatt.upsanddowns;
 
 import android.app.ListActivity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -39,6 +40,7 @@ public class ListAll extends ListActivity {
         String tempCol2;
         String tempCol3;
         Integer tempTextColor=0;
+        Integer tempDBId=0;
 
         Integer upTextColor=getResources().getColor(R.color.colorUp);
         Integer downTextColor=getResources().getColor(R.color.colorDown);
@@ -88,6 +90,8 @@ public class ListAll extends ListActivity {
                 } catch (Exception parseException) {
                 }
 
+                tempDBId = cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema._ID));
+
                 tempCol1 = String.format("%1$d",cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema._ID)))
                          + " "
                          + dateFormatOutout.format(parsedDate);
@@ -107,7 +111,7 @@ public class ListAll extends ListActivity {
                     tempCol3 = tempCol3 + widebeamFlag;
                 }
 
-                threeColumnList.add(new ItemData(tempCol1, tempCol2, tempCol3, tempTextColor));
+                threeColumnList.add(new ItemData(tempCol1, tempCol2, tempCol3, tempTextColor, tempDBId));
 
             }
 
@@ -128,6 +132,13 @@ public class ListAll extends ListActivity {
 
 
         Log.w("Click", (Integer.toString(position)+" "+Long.toString(id)));
+
+        clickedRecordPosition=position;
+
+        Intent intent=new Intent(ListAll.this, EditLock.class);
+        intent.putExtra(EditLock.EXTRA_DBID, String.format("%1$d",threeColumnList.get(position).getdBId()));
+        startActivityForResult(intent,0);
+
 
         /*
         threeColumnList.set(1,new ItemData("g", "h", "i",0));

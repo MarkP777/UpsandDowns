@@ -17,6 +17,7 @@
         </activity>
         <activity android:name=".ConfirmUpsDowns"/>
         <activity android:name=".ListAll"/>
+        <activity android:name=".EditLock"/>
     </application>
 
 </manifest>

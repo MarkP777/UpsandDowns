@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Stats"
+    <item android:title="List All"
         android:id="@+id/Menu1" />
     <item android:title="Option 2"
         android:id="@+id/Menu2" />
