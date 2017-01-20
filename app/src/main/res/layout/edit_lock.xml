@@ -157,7 +157,8 @@
         android:layout_marginTop="100dp"
         android:background="@color/colorConfirm"
         android:id="@+id/button2"
-        style="@style/Widget.AppCompat.Button.Colored" />
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:onClick="confirmUpdate" />
 
     <Button
         android:text="Delete record"
@@ -166,6 +167,7 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:background="@color/colorDelete"
         android:layout_marginTop="30dp"
-        android:id="@+id/button3" />
+        android:id="@+id/button3"
+        android:onClick="deleteRecord" />
 
 </LinearLayout>

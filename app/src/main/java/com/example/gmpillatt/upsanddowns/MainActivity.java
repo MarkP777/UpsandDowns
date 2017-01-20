@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
             case RESULT_CANCELED:
             {
+                //Don't need to update the totals if the user cancelled, but keeping it in for the time being
                 writeUpsAndDowns();
                 Log.w("MainActivity","Cancelled Count "+String.format("%1$d",count));
                 break;

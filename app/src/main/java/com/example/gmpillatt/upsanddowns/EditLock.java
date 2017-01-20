@@ -1,6 +1,7 @@
 package com.example.gmpillatt.upsanddowns;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -48,28 +49,32 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
     private TextView dayOfWeekTextView;
 
-    public static final String EXTRA_DBID= "";
+    private int dBIdInt;
+    private String dBIdString;
+
+    private String[] hoursValues = new String[24];
+    private String[] minsValues = new String[60];
+    private String[] dayValues = new String[31];
+    private String[] monthValues = new String[12];
+    private String[] yearValues = new String[5];
+    private String[] boatValues=new String[9];
+
+    private final int indexUp = 0;
+    private final int indexDown = 1;
+
+    public static final String EXTRA_DBID= "DBId";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.w("MainActivity", "Started");
+        Log.w(TAG, "Started");
         setContentView(R.layout.edit_lock);
 
         DBHelperClass dBHelper = new DBHelperClass(this);
         SQLiteDatabase db = dBHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
 
-        String[] hoursValues = new String[24];
-        String[] minsValues = new String[60];
-        String[] dayValues = new String[31];
-        String[] monthValues = new String[12];
-        String[] yearValues = new String[5];
-        String[] boatValues=new String[9];
         String[] upDownValues = new String[]{"Up","Down"};
-
-        final int indexUp = 0;
-        final int indexDown = 1;
 
         Date parsedDate = new Date();
         SimpleDateFormat dateFormatToParse=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -161,7 +166,10 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         yearSpinnerId=yearSpinner.getId();
 
 //Define projection for DB query
-        String dBId = (String) getIntent().getExtras().get(EXTRA_DBID);
+        dBIdString = (String) getIntent().getExtras().get(EXTRA_DBID);
+        dBIdInt = Integer.valueOf(dBIdString);
+
+        Log.w(TAG,"DB id: "+dBIdString);
 
         String[] projection = {
                 DBContractClass.DBSchema._ID,
@@ -175,7 +183,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         //Wrap DB work in a try/catch
         try {
 
-            cursor = db.query(DBContractClass.DBSchema.TABLE_NAME, projection, "_id= ?", new String [] {dBId}, null, null, null);
+            cursor = db.query(DBContractClass.DBSchema.TABLE_NAME, projection, "_id= ?", new String [] {dBIdString}, null, null, null);
 
             cursor.moveToFirst();
 
@@ -225,6 +233,8 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         else
         {widebeamCheckbox.setChecked(false);}
 
+        cursor.close();
+
 
 // Set listeners for the date spinners so that we can validate on the fly
         daySpinner.setOnItemSelectedListener(this);
@@ -233,13 +243,98 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
     }
 
+    public void confirmUpdate(View view)
+    {
+        try {
+            DBHelperClass dBHelper = new DBHelperClass(this);
+            SQLiteDatabase db = dBHelper.getWritableDatabase();
+
+            Log.w(TAG, "confirmUpdate started");
+
+            //User wants to update the record
+
+            ContentValues values = new ContentValues();
+
+            //
+            values.put(DBContractClass.DBSchema._ID, dBIdInt);
+
+            //set the flight
+            values.put(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT, "S3L");
+
+            //set the date and time
+            values.put(DBContractClass.DBSchema.COLUMN_NAME_DATETIME,
+                    yearSpinner.getSelectedItem() + "-" +
+                            monthSpinner.getSelectedItem() + "-" +
+                            daySpinner.getSelectedItem() + " " +
+                            hoursSpinner.getSelectedItem() + ":" +
+                            minsSpinner.getSelectedItem() + ":00");
+
+            //Set the direction
+            if (upDownSpinner.getSelectedItemPosition() == indexUp) {
+                values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "U");
+            } else {
+                values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "D");
+            }
+
+            //Set the number of boats
+            values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, Integer.valueOf((String) boatsSpinner.getSelectedItem()));
+
+            //Set the widebeam flag
+            if (widebeamCheckbox.isChecked()) {
+                values.put(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM, "W");
+            } else {
+                values.put(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM, "N");
+            }
+
+            //Update the database
+            //TODO Look at the where clause
+            db.update(DBContractClass.DBSchema.TABLE_NAME, values, "_id=" + dBIdString, null);
+
+        }
+        catch (SQLiteException e) {}
+
+
+        //Tell the parent activity that the user updated a record
+        Intent intent = new Intent();
+        intent.putExtra(ListAll.EXTRA_USERACTION,1);
+        setResult(RESULT_OK,intent);
+
+        finish();
+    }
+
+    public void deleteRecord(View view)
+    {
+
+        try {
+            DBHelperClass dBHelper = new DBHelperClass(this);
+            SQLiteDatabase db = dBHelper.getWritableDatabase();
+
+            Log.w(TAG, "deleteRecord started");
+
+            db.delete(DBContractClass.DBSchema.TABLE_NAME, "_id= ?", new String[]{dBIdString});
+        }
+        catch (SQLiteException e) {}
+
+
+        //Tell the parent activity that the user deleted a record
+        Intent intent = new Intent();
+        intent.putExtra(ListAll.EXTRA_USERACTION,2);
+        setResult(RESULT_OK,intent);
+
+        finish();
+
+    }
+
+
+
+
+
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // On selecting a spinner item
-        String item = parent.getItemAtPosition(position).toString();
 
         // Showing selected spinner item
-        Log.w("Spinner "+parent.getId(), "Selected: "
+        Log.w(TAG, "Spinner "+parent.getId()+ "Selected: "
                 + daySpinner.getSelectedItemPosition() + " "
                 + monthSpinner.getSelectedItemPosition() + " "
                 + yearSpinner.getSelectedItemPosition());
@@ -275,10 +370,6 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         Calendar newCalendar = new GregorianCalendar(yearSpinner.getSelectedItemPosition()+2017, monthSpinner.getSelectedItemPosition()+1, daySpinner.getSelectedItemPosition()+1);
         Date newDate = newCalendar.getTime();
         dayOfWeekTextView.setText((String) DateFormat.format("EEE", newDate));
-
-
-
-
     }
 
 

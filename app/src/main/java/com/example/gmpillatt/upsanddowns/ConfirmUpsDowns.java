@@ -22,7 +22,7 @@ public class ConfirmUpsDowns extends AppCompatActivity {
     private TextView textWidebeam;
     public CheckBox checkBox;
     public boolean wideBeam;
-    public static final String EXTRA_USERCHOICE= "";
+    public static final String EXTRA_USERCHOICE= "UserChoice";
 
     DBHelperClass dBHelper = new DBHelperClass(this);
     ContentValues values = new ContentValues();
@@ -51,6 +51,8 @@ public class ConfirmUpsDowns extends AppCompatActivity {
         values.put(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT, "S3L");
 
 
+        //Set the result as Cancelled. This will be reset to successful if the user confirms
+        setResult(RESULT_CANCELED);
 
         int userChoice = (Integer) getIntent().getExtras().get(EXTRA_USERCHOICE);
 

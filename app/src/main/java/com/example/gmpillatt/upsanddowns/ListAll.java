@@ -11,6 +11,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 import java.text.SimpleDateFormat;
@@ -31,6 +32,8 @@ public class ListAll extends ListActivity {
     ThreeColumnAdapter adapter;
 
     int clickedRecordPosition=0;
+
+    public static final String EXTRA_USERACTION="User action";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +134,7 @@ public class ListAll extends ListActivity {
     public void onListItemClick(ListView listView, View itemView, int position, long id) {
 
 
-        Log.w("Click", (Integer.toString(position)+" "+Long.toString(id)));
+        Log.w(TAG, "Clicked "+(Integer.toString(position)+" "+Long.toString(id)));
 
         clickedRecordPosition=position;
 
@@ -155,7 +158,54 @@ public class ListAll extends ListActivity {
         }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        Log.w(TAG,"onActivityresultstarted");
 
+        switch (resultCode) {
+            case RESULT_OK:
+                //User changed the data
+            {
+                //Find out what the user did
+                //TODO consider using shared preferences to pass what record is being worked on and user action
+                int userAction = data.getIntExtra(EXTRA_USERACTION,0);
+
+                switch (userAction) {
+                case 1:
+                    //Update
+                    Log.w(TAG,"User action was(1): "+userAction);
+                    //Need to refresh the whole of the dataset just in case the date/time has changed
+                    // thereby changing the order of records
+                {
+                    break;
+                }
+                case 2:
+                    //Delete
+                    Log.w(TAG,"User action was(2): "+userAction);
+                    //Need to remove the item from the list
+                {
+
+                    break;
+
+                }
+
+
+            }
+
+                //Tell the adapter that the list has changed
+                adapter.notifyDataSetChanged();
+
+            }
+            case RESULT_CANCELED:
+                //User cancelled. Nothing to do.
+            {
+                break;
+            }
+
+
+        }
+    }
 
 
 
