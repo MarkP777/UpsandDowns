@@ -38,7 +38,7 @@ public class ListAll extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+/*
         String tempCol1;
         String tempCol2;
         String tempCol3;
@@ -118,6 +118,14 @@ public class ListAll extends ListActivity {
 
             }
 
+*/
+        //Tell the parent activity that we're doing a ListAll. Always return OK
+        Intent intent = new Intent();
+        intent.putExtra(MainActivity.EXTRA_USERSELECTION,4);
+        setResult(RESULT_OK,intent);
+
+        //Fill the list of data that's going to be displayed
+        fillList();
 
         // Seems to be integral to ListActivity and means that we don't setContentView
         ListView listView = getListView();
@@ -158,6 +166,98 @@ public class ListAll extends ListActivity {
         }
 
 
+    void fillList() {
+
+        String tempCol1;
+        String tempCol2;
+        String tempCol3;
+        Integer tempTextColor=0;
+        Integer tempDBId=0;
+
+        Integer upTextColor=getResources().getColor(R.color.colorUp);
+        Integer downTextColor=getResources().getColor(R.color.colorDown);
+
+        DBHelperClass dBHelper = new DBHelperClass(this);
+        SQLiteDatabase db = dBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        Date parsedDate = new Date();
+        SimpleDateFormat dateFormatToParse=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormatOutout=new SimpleDateFormat("HH:mm EEE dd/MM");
+
+        String widebeamFlag="(W)";
+
+        //Make sure that the list is clear before we start adding to it
+        threeColumnList.clear();
+
+        //Define projection for DB query
+        String[] projection = {
+                DBContractClass.DBSchema._ID,
+                DBContractClass.DBSchema.COLUMN_NAME_FLIGHT,
+                DBContractClass.DBSchema.COLUMN_NAME_DATETIME,
+                DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS,
+                DBContractClass.DBSchema.COLUMN_NAME_UPDOWN,
+                DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM
+        };
+
+        //Wrap DB work in a try/catch
+        try {
+
+            //Query the db. This will reset the cursor position to the start
+            //Note that we should perhaps pass a string array for the sort order, but I doubt if it really matters
+            cursor = db.query(
+                    DBContractClass.DBSchema.TABLE_NAME,                     // The table to query
+                    projection,                               // The columns to return
+                    null,                                // The columns for the WHERE clause
+                    null,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    "date_Time DESC, _ID DESC"                                 // The sort order
+            );
+
+        }
+        catch (SQLiteException e) {}
+
+
+        //Work through the cursor, which will have been set to the beginning by the query
+        while (cursor.moveToNext()) {
+
+            try {
+                parsedDate = dateFormatToParse.parse(cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_DATETIME)));
+            } catch (Exception parseException) {
+            }
+
+            tempDBId = cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema._ID));
+
+            tempCol1 = String.format("%1$d",cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema._ID)))
+                    + " "
+                    + dateFormatOutout.format(parsedDate);
+
+            if (cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN)).equals("U")) {
+                tempCol2 = "Up";
+                tempTextColor = upTextColor;
+            } else if (cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN)).equals("D")) {
+                tempCol2 = "Down";
+                tempTextColor = downTextColor;
+            } else {
+                tempCol2 = " ";
+            }
+
+            tempCol3 = String.format("%1$d", cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS)));
+            if (cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM)).equals("W")) {
+                tempCol3 = tempCol3 + widebeamFlag;
+            }
+
+            threeColumnList.add(new ItemData(tempCol1, tempCol2, tempCol3, tempTextColor, tempDBId));
+
+        }
+
+        //Close the cursor
+        cursor.close();
+
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -173,18 +273,26 @@ public class ListAll extends ListActivity {
 
                 switch (userAction) {
                 case 1:
+                {
                     //Update
                     Log.w(TAG,"User action was(1): "+userAction);
                     //Need to refresh the whole of the dataset just in case the date/time has changed
+
                     // thereby changing the order of records
-                {
+                    fillList();
+
                     break;
                 }
+
                 case 2:
+                {
                     //Delete
                     Log.w(TAG,"User action was(2): "+userAction);
+
                     //Need to remove the item from the list
-                {
+                    threeColumnList.remove(clickedRecordPosition);
+
+
 
                     break;
 

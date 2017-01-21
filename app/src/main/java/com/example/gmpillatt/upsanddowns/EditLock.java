@@ -366,8 +366,8 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
                 }
             }
 
-        //Reconstruct the date and then get and display the day of the week
-        Calendar newCalendar = new GregorianCalendar(yearSpinner.getSelectedItemPosition()+2017, monthSpinner.getSelectedItemPosition()+1, daySpinner.getSelectedItemPosition()+1);
+        //Reconstruct the date and then get and display the day of the week. Note that months start at 0 as per the spinner positions
+        Calendar newCalendar = new GregorianCalendar(yearSpinner.getSelectedItemPosition()+2017, monthSpinner.getSelectedItemPosition(), daySpinner.getSelectedItemPosition()+1);
         Date newDate = newCalendar.getTime();
         dayOfWeekTextView.setText((String) DateFormat.format("EEE", newDate));
     }

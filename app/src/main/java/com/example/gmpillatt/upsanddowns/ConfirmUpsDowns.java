@@ -1,6 +1,7 @@
 package com.example.gmpillatt.upsanddowns;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ public class ConfirmUpsDowns extends AppCompatActivity {
     DBHelperClass dBHelper = new DBHelperClass(this);
     ContentValues values = new ContentValues();
 
+    Intent intent = new Intent();
+
     @Override
     protected void onCreate (Bundle saved) {
         super.onCreate(saved);
@@ -50,9 +53,14 @@ public class ConfirmUpsDowns extends AppCompatActivity {
         //set the flight
         values.put(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT, "S3L");
 
-
+/*
         //Set the result as Cancelled. This will be reset to successful if the user confirms
         setResult(RESULT_CANCELED);
+*/
+        //Tell the parent activity that we've been into confirmUpsDowns
+        //Set the result as Cancelled. This will be reset to successful if the user confirms
+        intent.putExtra(MainActivity.EXTRA_USERSELECTION,3);
+        setResult(RESULT_CANCELED,intent);
 
         int userChoice = (Integer) getIntent().getExtras().get(EXTRA_USERCHOICE);
 
@@ -125,7 +133,7 @@ public void confirmLock(View view) {
         Log.w("Confirm", "Exception");
     }
 
-    setResult(RESULT_OK);
+    setResult(RESULT_OK,intent);
     finish();
 
     return;

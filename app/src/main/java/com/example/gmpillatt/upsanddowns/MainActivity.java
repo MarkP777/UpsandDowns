@@ -15,9 +15,12 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     public TextView textUps;
     public TextView textDowns;
     private Integer userChoice;
+
+    public static final String EXTRA_USERSELECTION="UserSelection";
 
     String upDown=" ";
     Integer count=0;
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.w("MainActivity", "Started");
+        Log.w(TAG, "Started");
         setContentView(R.layout.activity_main);
 
         //Initialise TextView
@@ -42,39 +45,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        Log.w("onClick", "Button pressed " + view.getId());
+        Log.w(TAG, "onClick Button pressed " + view.getId());
         Intent intent = new Intent(MainActivity.this, ConfirmUpsDowns.class);
         intent.putExtra(ConfirmUpsDowns.EXTRA_USERCHOICE, (int)view.getId());
         //setUserChoice(view.getId());
-        startActivityForResult(intent,0);
+        startActivityForResult(intent,3);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        Log.w("onActivityresult","started");
-        TextView tV;
-        tV=(TextView)findViewById(R.id.textView2);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.w(TAG, "onActivityresult started");
 
-        switch (resultCode) {
-            case RESULT_OK:
-            {
+        //Find out where we're coming from
+        int userAction = data.getIntExtra(EXTRA_USERSELECTION, 0);
+        Log.w(TAG,"onActivityResult user selection"+userAction);
+
+        switch (userAction) {
+
+            case (3): { //Added some ups or downs
+
+                switch (resultCode) {
+                    case RESULT_OK: {
+                        Log.w("MainActivity", "OK Count " + String.format("%1$d", count));
+                        writeUpsAndDowns();
+                        break;
+                    }
+                    case RESULT_CANCELED: {
+                        //Don't need to update the totals if the user cancelled, but keeping it in for the time being
+                        Log.w("MainActivity", "Cancelled Count " + String.format("%1$d", count));
+                        writeUpsAndDowns();
+                        break;
+                    }
+
+                }
+                break;
+            }
+
+            case (4): { //List All
+
+                //Don't check the result code - always OK
                 writeUpsAndDowns();
-                Log.w("MainActivity","OK Count "+String.format("%1$d",count));
+                Log.w(TAG, "Return from ListAll");
                 break;
 
             }
-            case RESULT_CANCELED:
-            {
-                //Don't need to update the totals if the user cancelled, but keeping it in for the time being
-                writeUpsAndDowns();
-                Log.w("MainActivity","Cancelled Count "+String.format("%1$d",count));
-                break;
-
-            }
-
-
         }
+
     }
 
 
@@ -127,18 +143,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        Intent intent1=new Intent(MainActivity.this,ListAll.class);
+
         switch (item.getItemId()) {
             case R.id.Menu1:
-                startActivity(intent1);
+                Intent intent1=new Intent(MainActivity.this,ListAll.class);
+                startActivityForResult(intent1,4);
                 return true;
             case R.id.Menu2:
-                startActivity(intent1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
 
 }
