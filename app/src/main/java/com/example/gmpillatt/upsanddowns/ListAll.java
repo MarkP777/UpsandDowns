@@ -142,7 +142,7 @@ public class ListAll extends ListActivity {
     public void onListItemClick(ListView listView, View itemView, int position, long id) {
 
 
-        Log.w(TAG, "Clicked "+(Integer.toString(position)+" "+Long.toString(id)));
+        if (BuildConfig.DEBUG) Log.w(TAG, "Clicked "+(Integer.toString(position)+" "+Long.toString(id)));
 
         clickedRecordPosition=position;
 
@@ -261,7 +261,7 @@ public class ListAll extends ListActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        Log.w(TAG,"onActivityresultstarted");
+        if (BuildConfig.DEBUG) Log.w(TAG,"onActivityresultstarted");
 
         switch (resultCode) {
             case RESULT_OK:
@@ -275,7 +275,7 @@ public class ListAll extends ListActivity {
                 case 1:
                 {
                     //Update
-                    Log.w(TAG,"User action was(1): "+userAction);
+                    if (BuildConfig.DEBUG) Log.w(TAG,"User action was(1): "+userAction);
                     //Need to refresh the whole of the dataset just in case the date/time has changed
 
                     // thereby changing the order of records
@@ -287,7 +287,7 @@ public class ListAll extends ListActivity {
                 case 2:
                 {
                     //Delete
-                    Log.w(TAG,"User action was(2): "+userAction);
+                    if (BuildConfig.DEBUG) Log.w(TAG,"User action was(2): "+userAction);
 
                     //Need to remove the item from the list
                     threeColumnList.remove(clickedRecordPosition);

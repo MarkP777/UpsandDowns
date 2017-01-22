@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import static com.example.gmpillatt.upsanddowns.BuildConfig.DEBUG;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.w(TAG, "Started");
+        if (BuildConfig.DEBUG) Log.w(TAG, "Started");
         setContentView(R.layout.activity_main);
 
         //Initialise TextView
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        Log.w(TAG, "onClick Button pressed " + view.getId());
+        if (BuildConfig.DEBUG) Log.w(TAG, "onClick Button pressed " + view.getId());
         Intent intent = new Intent(MainActivity.this, ConfirmUpsDowns.class);
         intent.putExtra(ConfirmUpsDowns.EXTRA_USERCHOICE, (int)view.getId());
         //setUserChoice(view.getId());
@@ -54,11 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.w(TAG, "onActivityresult started");
+        if (BuildConfig.DEBUG)Log.w(TAG, "onActivityresult started");
 
         //Find out where we're coming from
         int userAction = data.getIntExtra(EXTRA_USERSELECTION, 0);
-        Log.w(TAG,"onActivityResult user selection"+userAction);
+        if (BuildConfig.DEBUG)Log.w(TAG,"onActivityResult user selection"+userAction);
 
         switch (userAction) {
 
@@ -66,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (resultCode) {
                     case RESULT_OK: {
-                        Log.w("MainActivity", "OK Count " + String.format("%1$d", count));
+                        if (BuildConfig.DEBUG)Log.w("MainActivity", "OK Count " + String.format("%1$d", count));
                         writeUpsAndDowns();
                         break;
                     }
                     case RESULT_CANCELED: {
                         //Don't need to update the totals if the user cancelled, but keeping it in for the time being
-                        Log.w("MainActivity", "Cancelled Count " + String.format("%1$d", count));
+                        if (BuildConfig.DEBUG)Log.w("MainActivity", "Cancelled Count " + String.format("%1$d", count));
                         writeUpsAndDowns();
                         break;
                     }
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Don't check the result code - always OK
                 writeUpsAndDowns();
-                Log.w(TAG, "Return from ListAll");
+                if (BuildConfig.DEBUG)Log.w(TAG, "Return from ListAll");
                 break;
 
             }
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
 
-            Log.w("WriteUpsandDowns","Started");
+            if (BuildConfig.DEBUG)Log.w("WriteUpsandDowns","Started");
 
             SQLiteDatabase db = dBHelper.getWritableDatabase();
 
@@ -113,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
                 if (upDown.equals("U"))
                 {
                     textUps.setText(String.format("%1$d",count) + " Up");
-                    Log.w("MainActivity",String.format("%1$d",count) + " Up");
+                    if (BuildConfig.DEBUG)Log.w("MainActivity",String.format("%1$d",count) + " Up");
                 }
                 else if (upDown.equals("D"))
                 {
                     textDowns.setText(String.format("%1$d",count) + " Down");
-                    Log.w("MainActivity",String.format("%1$d",count) + " Down");
+                    if (BuildConfig.DEBUG)Log.w("MainActivity",String.format("%1$d",count) + " Down");
                 }
 
             }
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         }
         catch (SQLiteException e) {
 
-            Log.w("MainActivity", "Exception");
+            if (BuildConfig.DEBUG)Log.w("MainActivity", "Exception");
 
         }
 

@@ -35,7 +35,7 @@ public class ConfirmUpsDowns extends AppCompatActivity {
         super.onCreate(saved);
         setContentView(R.layout.confirm_ups_downs);
 
-        Log.w("Confirm","started");
+        if (BuildConfig.DEBUG) Log.w("Confirm","started");
 
         //private Integer userChoice;
 
@@ -126,17 +126,16 @@ public void confirmLock(View view) {
     try {
         SQLiteDatabase db = dBHelper.getWritableDatabase();
         long newRowId = db.insert(DBContractClass.DBSchema.TABLE_NAME, null, values);
-        Log.w("Confirm","Row inserted");
+        if (BuildConfig.DEBUG) Log.w("Confirm","Row inserted");
     }
     catch (SQLiteException e)
     {
-        Log.w("Confirm", "Exception");
+        if (BuildConfig.DEBUG) Log.w("Confirm", "Exception");
     }
 
     setResult(RESULT_OK,intent);
     finish();
 
-    return;
 }
 
 

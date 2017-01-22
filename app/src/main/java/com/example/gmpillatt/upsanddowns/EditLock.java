@@ -68,7 +68,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.w(TAG, "Started");
+        if (BuildConfig.DEBUG) Log.w(TAG, "Started");
         setContentView(R.layout.edit_lock);
 
         DBHelperClass dBHelper = new DBHelperClass(this);
@@ -169,7 +169,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         dBIdString = (String) getIntent().getExtras().get(EXTRA_DBID);
         dBIdInt = Integer.valueOf(dBIdString);
 
-        Log.w(TAG,"DB id: "+dBIdString);
+        if (BuildConfig.DEBUG) Log.w(TAG,"DB id: "+dBIdString);
 
         String[] projection = {
                 DBContractClass.DBSchema._ID,
@@ -249,7 +249,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
             DBHelperClass dBHelper = new DBHelperClass(this);
             SQLiteDatabase db = dBHelper.getWritableDatabase();
 
-            Log.w(TAG, "confirmUpdate started");
+            if (BuildConfig.DEBUG) Log.w(TAG, "confirmUpdate started");
 
             //User wants to update the record
 
@@ -309,7 +309,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
             DBHelperClass dBHelper = new DBHelperClass(this);
             SQLiteDatabase db = dBHelper.getWritableDatabase();
 
-            Log.w(TAG, "deleteRecord started");
+            if (BuildConfig.DEBUG) Log.w(TAG, "deleteRecord started");
 
             db.delete(DBContractClass.DBSchema.TABLE_NAME, "_id= ?", new String[]{dBIdString});
         }
@@ -334,7 +334,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         // Showing selected spinner item
-        Log.w(TAG, "Spinner "+parent.getId()+ "Selected: "
+        if (BuildConfig.DEBUG) Log.w(TAG, "Spinner "+parent.getId()+ "Selected: "
                 + daySpinner.getSelectedItemPosition() + " "
                 + monthSpinner.getSelectedItemPosition() + " "
                 + yearSpinner.getSelectedItemPosition());
