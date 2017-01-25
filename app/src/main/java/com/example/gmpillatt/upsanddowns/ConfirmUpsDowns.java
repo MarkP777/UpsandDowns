@@ -41,7 +41,6 @@ public class ConfirmUpsDowns extends AppCompatActivity {
 
         //bind TextView
         textConfirm = (TextView) findViewById(R.id.tvChoice);
-        textWidebeam = (TextView) findViewById(R.id.tvWidebeam);
 
 
         //bind checkbox
@@ -69,7 +68,6 @@ public class ConfirmUpsDowns extends AppCompatActivity {
             case R.id.btn1Up: {
                 textConfirm.setTextColor(getResources().getColor(R.color.colorUp));
                 textConfirm.setText(getString(R.string.str1Up));
-                textWidebeam.setVisibility(View.VISIBLE);
                 checkBox.setVisibility(View.VISIBLE);
                 values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, 1);
                 values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "U");
@@ -79,7 +77,6 @@ public class ConfirmUpsDowns extends AppCompatActivity {
             case R.id.btn2Up: {
                 textConfirm.setTextColor(getResources().getColor(R.color.colorUp));
                 textConfirm.setText(getString(R.string.str2Up));
-                textWidebeam.setVisibility(View.INVISIBLE);
                 checkBox.setVisibility(View.INVISIBLE);
                 values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, 2);
                 values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "U");
@@ -90,7 +87,6 @@ public class ConfirmUpsDowns extends AppCompatActivity {
 
                 textConfirm.setTextColor(getResources().getColor(R.color.colorDown));
                 textConfirm.setText(getString(R.string.str1Down));
-                textWidebeam.setVisibility(View.VISIBLE);
                 checkBox.setVisibility(View.VISIBLE);
                 values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, 1);
                 values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "D");
@@ -100,7 +96,6 @@ public class ConfirmUpsDowns extends AppCompatActivity {
             case R.id.btn2Down: {
                 textConfirm.setTextColor(getResources().getColor(R.color.colorDown));
                 textConfirm.setText(getString(R.string.str2Down));
-                textWidebeam.setVisibility(View.INVISIBLE);
                 checkBox.setVisibility(View.INVISIBLE);
                 values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, 2);
                 values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "D");

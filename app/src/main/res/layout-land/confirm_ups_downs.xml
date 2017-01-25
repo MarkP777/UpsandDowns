@@ -16,7 +16,7 @@
         app:layout_marginStartPercent="10%"
         app:layout_widthPercent="80%"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="20dp"
         android:textAlignment="center"
         android:gravity="bottom"
         android:layout_alignParentTop="true"
@@ -27,7 +27,6 @@
         android:textColor="@color/colorUp" />
     <!--style="@style/Widget.AppCompat.Button.Colored"
     android:background="@color/colorDown"-->
-
 <!--
     <CheckBox
         android:text=""
@@ -48,8 +47,8 @@
         android:layout_below="@+id/tvChoice"
         android:layout_above="@+id/btnUpDownConfirm"
         android:gravity="center_vertical"
-        android:layout_marginStart="75dp"
-        android:layout_marginEnd="75dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginEnd="150dp"
         android:text="Widebeam"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,10 +61,12 @@
         android:checked="false" />
 
 
+
+
     <Button
         android:text="Confirm"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="62dp"
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnUpDownConfirm"
@@ -73,29 +74,28 @@
         android:background="@color/colorConfirm"
         android:onClick="confirmLock"
         android:textSize="24sp"/>
+<!--
+    <TextView
+        android:text=""
+        android:layout_below="@id/tvChoice"
+        android:layout_marginTop="30dp"
+        android:maxWidth="0dp"
+        android:id="@+id/tvAnchor"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:textAppearance="@android:style/TextAppearance.Small" />
 
-    <!--
-        <TextView
-            android:text=""
-            android:layout_below="@id/tvChoice"
-            android:layout_marginTop="50dp"
-            android:maxWidth="0dp"
-            android:id="@+id/tvAnchor"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible"
-            android:textAppearance="@android:style/TextAppearance.Small" />
-
-        <TextView
-            android:text="Widebeam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvWidebeam"
-            android:visibility="visible"
-            android:textAppearance="@android:style/TextAppearance.Large"
-            android:layout_alignBaseline="@+id/tvAnchor"
-            android:layout_alignBottom="@+id/tvAnchor"
-            android:layout_alignEnd="@+id/tvAnchor"
-            android:layout_marginEnd="5dp"
-            android:textSize="30sp"/>
-    -->
+    <TextView
+        android:text="Widebeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvWidebeam"
+        android:visibility="visible"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:layout_alignBaseline="@+id/tvAnchor"
+        android:layout_alignBottom="@+id/tvAnchor"
+        android:layout_alignEnd="@+id/tvAnchor"
+        android:layout_marginEnd="5dp"
+        android:textSize="30sp"/>
+-->
 </android.support.percent.PercentRelativeLayout>

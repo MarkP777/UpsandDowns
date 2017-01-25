@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,7 +29,7 @@ import java.util.GregorianCalendar;
  * Created by gmpillatt on 17/01/2017.
  */
 
-public class EditLock extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class EditLock extends AppCompatActivity implements AdapterView.OnItemSelectedListener,NoticeDialogFragment.NoticeDialogListener {
 
     private static final String TAG = "EditLock";
     private static Cursor cursor;
@@ -51,6 +53,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
     private int dBIdInt;
     private String dBIdString;
+    private String recordString;
 
     private String[] hoursValues = new String[24];
     private String[] minsValues = new String[60];
@@ -190,7 +193,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         }
         catch (SQLiteException e) {}
 
-        //Unwrap the data and display it
+        //Unwrap the data and display and save it
 
         //Date and time
         try {
@@ -207,6 +210,10 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         int minute = c.get(Calendar.MINUTE);
         String dayOfTheWeek = (String) DateFormat.format("EEE", parsedDate);
 
+        recordString = cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT)) + getString(R.string.separator);
+
+        recordString = recordString + (String) DateFormat.format("yyyy-MM-dd HH:mm",parsedDate)+getString(R.string.separator);
+
         daySpinner.setSelection(day-1);
         monthSpinner.setSelection(month-1);
         yearSpinner.setSelection(year-2017);
@@ -217,6 +224,9 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         // Direction
 
         String direction = cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN));
+
+        recordString = recordString + direction + getString(R.string.separator);
+
         if (direction.equals("U"))
             {upDownSpinner.setSelection(indexUp);}
         else
@@ -224,10 +234,16 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
         //Number of boats
         int boats = cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS));
+
+        recordString = recordString + String.format("%1$d",boats) + getString(R.string.separator);
+
         boatsSpinner.setSelection(boats-1);
 
         //Widebeam
         String widebeam = cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM));
+
+        recordString = recordString + widebeam;
+
         if (widebeam.equals("W"))
         {widebeamCheckbox.setChecked(true);}
         else
@@ -305,6 +321,12 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
     public void deleteRecord(View view)
     {
 
+        if (BuildConfig.DEBUG) Log.w(TAG,"User ask for delete - confirmation required");
+
+        //Ask user for confirmation. All other processing depends on a positive response
+        showNoticeDialog();
+
+/*
         try {
             DBHelperClass dBHelper = new DBHelperClass(this);
             SQLiteDatabase db = dBHelper.getWritableDatabase();
@@ -322,9 +344,57 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         setResult(RESULT_OK,intent);
 
         finish();
+*/
+    }
+
+    public void showNoticeDialog() {
+        // Create an instance of the dialog fragment and show it
+
+        //FragmentManager fm = getFragmentManager();
+        DialogFragment dialog = new NoticeDialogFragment();
+
+        Bundle args = new Bundle();
+        args.putString("recordDetails",recordString);
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), "NoticeDialogFragment");
+    }
+
+
+
+    // The dialog fragment receives a reference to this Activity through the
+    // Fragment.onAttach() callback, which it uses to call the following methods
+    // defined by the NoticeDialogFragment.NoticeDialogListener interface
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // User touched the dialog's positive button
+        if (BuildConfig.DEBUG) Log.w(TAG,"Returned positive from alert dialog");
+
+            try {
+            DBHelperClass dBHelper = new DBHelperClass(this);
+            SQLiteDatabase db = dBHelper.getWritableDatabase();
+
+            if (BuildConfig.DEBUG) Log.w(TAG, "deleteRecord started");
+
+            db.delete(DBContractClass.DBSchema.TABLE_NAME, "_id= ?", new String[]{dBIdString});
+        }
+        catch (SQLiteException e) {}
+
+
+        //Tell the parent activity that the user deleted a record
+        Intent intent = new Intent();
+        intent.putExtra(ListAll.EXTRA_USERACTION,2);
+        setResult(RESULT_OK,intent);
+
+        finish();
+
 
     }
 
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // User touched the dialog's negative button - there isn't one so we really shouldn't get here
+        if (BuildConfig.DEBUG) Log.w(TAG,"In alert cancel dialog");
+    }
 
 
 

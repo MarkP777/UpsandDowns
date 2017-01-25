@@ -228,10 +228,13 @@ public class ListAll extends ListActivity {
             }
 
             tempDBId = cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema._ID));
-
+/*
             tempCol1 = String.format("%1$d",cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema._ID)))
                     + " "
                     + dateFormatOutout.format(parsedDate);
+*/
+
+            tempCol1 = dateFormatOutout.format(parsedDate);
 
             if (cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN)).equals("U")) {
                 tempCol2 = "Up";

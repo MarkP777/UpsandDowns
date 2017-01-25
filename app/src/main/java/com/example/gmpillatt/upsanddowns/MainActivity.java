@@ -107,23 +107,30 @@ public class MainActivity extends AppCompatActivity {
 
             c=db.rawQuery("SELECT upDown,SUM(numberBoats) FROM lockStats WHERE (date_Time >= date('now','start of day')) GROUP BY upDown;",null);
 
+
+            //Set counts. We won't get anything back from the query if there are no records
+            int upCount = 0;
+            int downCount=0;
+
             while (c.moveToNext()) {
 
-                upDown=c.getString(0);
-                count=c.getInt(1);
+                upDown = c.getString(0);
+                count = c.getInt(1);
 
-                if (upDown.equals("U"))
-                {
-                    textUps.setText(String.format("%1$d",count) + " Up");
-                    if (BuildConfig.DEBUG)Log.w("MainActivity",String.format("%1$d",count) + " Up");
-                }
-                else if (upDown.equals("D"))
-                {
-                    textDowns.setText(String.format("%1$d",count) + " Down");
-                    if (BuildConfig.DEBUG)Log.w("MainActivity",String.format("%1$d",count) + " Down");
+                if (upDown.equals("U")) {
+                    upCount = count;
+                    if (BuildConfig.DEBUG)
+                        Log.w("MainActivity", String.format("%1$d", count) + " Up");
+                } else if (upDown.equals("D")) {
+                    downCount = count;
+                    if (BuildConfig.DEBUG)
+                        Log.w("MainActivity", String.format("%1$d", count) + " Down");
                 }
 
             }
+            textUps.setText(String.format("%1$d",upCount) + " Up");
+            textDowns.setText(String.format("%1$d",downCount) + " Down");
+
 
         }
         catch (SQLiteException e) {
