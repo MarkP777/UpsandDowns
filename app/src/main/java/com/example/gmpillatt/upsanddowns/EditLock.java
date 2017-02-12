@@ -215,7 +215,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         recordString = recordString + (String) DateFormat.format("yyyy-MM-dd HH:mm",parsedDate)+getString(R.string.separator);
 
         daySpinner.setSelection(day-1);
-        monthSpinner.setSelection(month-1);
+        monthSpinner.setSelection(month);
         yearSpinner.setSelection(year-2017);
         hoursSpinner.setSelection(hour);
         minsSpinner.setSelection(minute);
