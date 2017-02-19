@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Cursor c;
     String timestamp=" ";
     DBHelperClass dBHelper = new DBHelperClass(this);
+    SQLiteDatabase db;
 
 
 
@@ -59,6 +60,16 @@ public class MainActivity extends AppCompatActivity {
         if (BuildConfig.DEBUG)Log.w(TAG, "onActivityresult started");
 
         //Find out where we're coming from
+        /*
+        Actions are:
+        1 Update record
+        2 Delete record
+        3 Add ups and downs
+        4 List all
+        5 Chart 1
+        6 Chart 2
+        7 Chart 3
+         */
         int userAction = data.getIntExtra(EXTRA_USERSELECTION, 0);
         if (BuildConfig.DEBUG)Log.w(TAG,"onActivityResult user selection"+userAction);
 
@@ -83,13 +94,22 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
 
-            case (4): { //List All
+            case (4): // List all
+            {
 
                 //Don't check the result code - always OK
                 writeUpsAndDowns();
                 if (BuildConfig.DEBUG)Log.w(TAG, "Return from ListAll");
                 break;
+            }
 
+            case (5): // Chart 1
+            case (6): // Chart 2
+            case (7): // Chart 3
+            {
+                //Don't check the result code - always OK
+                if (BuildConfig.DEBUG)Log.w(TAG, "Return from Chart");
+                break;
             }
         }
 
@@ -103,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (BuildConfig.DEBUG)Log.w("WriteUpsandDowns","Started");
 
-            SQLiteDatabase db = dBHelper.getWritableDatabase();
+            db = dBHelper.getWritableDatabase();
 
             c=db.rawQuery("SELECT upDown,SUM(numberBoats) FROM lockStats WHERE (date_Time >= date('now','start of day')) GROUP BY upDown;",null);
 
@@ -128,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
+            c.close();
             textUps.setText(String.format("%1$d",upCount) + " Up");
             textDowns.setText(String.format("%1$d",downCount) + " Down");
 
@@ -153,18 +174,36 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
 
+        Intent intent1;
+
         switch (item.getItemId()) {
             case R.id.Menu1:
-                Intent intent1=new Intent(MainActivity.this,ListAll.class);
+                intent1=new Intent(MainActivity.this,ListAll.class);
                 startActivityForResult(intent1,4);
                 return true;
             case R.id.Menu2:
+                intent1=new Intent(MainActivity.this,Chart1.class);
+                startActivityForResult(intent1,5);
+                return true;
+            case R.id.Menu3:
+                intent1=new Intent(MainActivity.this,Chart2.class);
+                startActivityForResult(intent1,6);
+                return true;
+            case R.id.Menu4:
+                intent1=new Intent(MainActivity.this,Chart3.class);
+                startActivityForResult(intent1,7);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        db.close();
+    }
 
 
 }

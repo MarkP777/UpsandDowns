@@ -37,8 +37,6 @@ public class ConfirmUpsDowns extends AppCompatActivity {
 
         if (BuildConfig.DEBUG) Log.w("Confirm","started");
 
-        //private Integer userChoice;
-
         //bind TextView
         textConfirm = (TextView) findViewById(R.id.tvChoice);
 
@@ -52,10 +50,6 @@ public class ConfirmUpsDowns extends AppCompatActivity {
         //set the flight
         values.put(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT, "S3L");
 
-/*
-        //Set the result as Cancelled. This will be reset to successful if the user confirms
-        setResult(RESULT_CANCELED);
-*/
         //Tell the parent activity that we've been into confirmUpsDowns
         //Set the result as Cancelled. This will be reset to successful if the user confirms
         intent.putExtra(MainActivity.EXTRA_USERSELECTION,3);

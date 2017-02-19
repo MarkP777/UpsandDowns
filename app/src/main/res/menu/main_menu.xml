@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="List All"
+    <item android:title="List records"
         android:id="@+id/Menu1" />
-    <item android:title="Option 2"
+    <item android:title="Chart - day by hour"
         android:id="@+id/Menu2" />
-
+    <item android:title="Chart - total by day of week"
+        android:id="@+id/Menu3" />
+    <item android:title="Chart - total by day"
+        android:id="@+id/Menu4" />
 </menu>

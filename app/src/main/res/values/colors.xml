@@ -5,6 +5,7 @@
     <color name="colorAccent">#d50000</color>
     <color name="colorUp">#ff7043</color>
     <color name="colorDown">#303f9f</color>
+    <color name="colorTotal">#d500f9</color>
     <color name="colorConfirm">#00c853</color>
     <color name="colorDelete">#d50000</color>
 </resources>

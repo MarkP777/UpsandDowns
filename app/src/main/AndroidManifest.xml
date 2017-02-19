@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gmpillatt.upsanddowns"
-    android:sharedUserId="com.gmp.gmp">
+    package="com.example.gmpillatt.upsanddowns">
+
+    <!--android:sharedUserId="com.gmp.gmp"-->
 
     <application
         android:allowBackup="true"
@@ -19,6 +20,9 @@
         <activity android:name=".ConfirmUpsDowns"/>
         <activity android:name=".ListAll"/>
         <activity android:name=".EditLock"/>
+        <activity android:name=".Chart1"/>
+        <activity android:name=".Chart2"/>
+        <activity android:name=".Chart3"/>
     </application>
 
 </manifest>
