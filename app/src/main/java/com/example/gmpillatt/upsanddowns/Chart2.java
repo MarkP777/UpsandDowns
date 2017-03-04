@@ -116,8 +116,8 @@ public class Chart2 extends AppCompatActivity {
         XAxis xAxis = chart.getXAxis();
         xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setAxisMinimum(0f);
-        xAxis.setAxisMaximum(25f);
+        xAxis.setAxisMinimum(-0.5f);
+        xAxis.setAxisMaximum(25.5f);
         //xAxis.setLabelCount(11);
         xAxis.setValueFormatter(new Chart2XAxisValueFormatter(xAxisValues));
         xAxis.setDrawGridLines(false);

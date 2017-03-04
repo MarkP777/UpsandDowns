@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gmpillatt.upsanddowns">
 
-    <!--android:sharedUserId="com.gmp.gmp"-->
+    <!--Insert in above for testing a shared DB: android:sharedUserId="com.gmp.gmp"-->
 
     <application
         android:allowBackup="true"
@@ -22,7 +22,8 @@
         <activity android:name=".EditLock"/>
         <activity android:name=".Chart1"/>
         <activity android:name=".Chart2"/>
-        <activity android:name=".Chart3"/>
+        <activity android:name=".Chart3" />
+        <activity android:name=".exportData"/>
     </application>
 
 </manifest>

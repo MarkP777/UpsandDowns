@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         5 Chart 1
         6 Chart 2
         7 Chart 3
+        8 email exported data (started from exportData)
+        9 export data
          */
         int userAction = data.getIntExtra(EXTRA_USERSELECTION, 0);
         if (BuildConfig.DEBUG)Log.w(TAG,"onActivityResult user selection"+userAction);
@@ -106,9 +108,10 @@ public class MainActivity extends AppCompatActivity {
             case (5): // Chart 1
             case (6): // Chart 2
             case (7): // Chart 3
+            case (9): //exportData
             {
                 //Don't check the result code - always OK
-                if (BuildConfig.DEBUG)Log.w(TAG, "Return from Chart");
+                if (BuildConfig.DEBUG)Log.w(TAG, "Return from Chart or Export");
                 break;
             }
         }
@@ -192,6 +195,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.Menu4:
                 intent1=new Intent(MainActivity.this,Chart3.class);
                 startActivityForResult(intent1,7);
+                return true;
+            case R.id.Menu5:
+                intent1=new Intent(MainActivity.this,exportData.class);
+                startActivityForResult(intent1,9);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

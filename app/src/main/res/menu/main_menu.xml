@@ -9,4 +9,6 @@
         android:id="@+id/Menu3" />
     <item android:title="Chart - total by day"
         android:id="@+id/Menu4" />
+    <item android:title="Export data"
+        android:id="@+id/Menu5" />
 </menu>

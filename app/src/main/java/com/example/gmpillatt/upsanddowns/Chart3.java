@@ -110,8 +110,8 @@ public class Chart3 extends AppCompatActivity {
         XAxis xAxis = chart.getXAxis();
         xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setAxisMinimum(0f);
-        xAxis.setAxisMaximum(30f);
+        xAxis.setAxisMinimum(-0.5f);
+        xAxis.setAxisMaximum(30.5f);
         xAxis.setValueFormatter(new Chart3XAxisValueFormatter(xAxisValues));
         xAxis.setDrawGridLines(false);
         xAxis.setCenterAxisLabels(true);
