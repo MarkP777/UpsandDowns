@@ -46,10 +46,10 @@ public class Chart1 extends AppCompatActivity {
     Calendar nextDate;
 
     // set custom bar width - just a a little bit of space between each up/down pair of bars
-    final float groupSpace = 0.06f;
+    final float groupSpace = 0.20f;
     final float barSpace = 0.00f; // x2 dataset
-    final float barWidth = 0.47f; // x2 dataset
-    // (0.00 + 0.47) * 2 + 0.06 = 1.00 -> interval per "group"
+    final float barWidth = 0.40f; // x2 dataset
+    // (0.00 + 0.40) * 2 + 0.20 = 1.00 -> interval per "group"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

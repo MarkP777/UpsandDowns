@@ -41,6 +41,7 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
     private int[] max_days_in_month;
     private Date todaysDate;
     private String exportFileName;
+    private File exportFile;
 
 
     @Override
@@ -245,15 +246,18 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
             String fieldSeparator = ",";
             String outputString = "";
 
-            FileOutputStream outputStream;
+
+
+            Context context = getApplicationContext();
+            exportFile = new File(context.getCacheDir(),exportFileName);
 
             Boolean noRecordsToExport = true;
 
-            if (BuildConfig.DEBUG) Log.w(TAG, "Output file name is " + exportFileName);
+            if (BuildConfig.DEBUG) Log.w(TAG, "Output file name is " + exportFile.getAbsolutePath());
 
             // Create the output file. No fancy checks on existence, etc. In theory, we should've cleared
             // up any old debris
-            outputStream = openFileOutput(exportFileName, Context.MODE_PRIVATE);
+            FileOutputStream outputStream = new FileOutputStream(exportFile);
 
             while (c.moveToNext()) {
 
@@ -287,7 +291,7 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
         // Gets rid of any old CSV files that might lying around
         // gets the file directory
         Context context = getApplicationContext();
-        File fileDirectory = new File(context.getFilesDir().getAbsolutePath());
+        File fileDirectory = new File(context.getCacheDir().getAbsolutePath());
 
         // lists all the files into an array
         File[] dirFiles = fileDirectory.listFiles();
@@ -355,7 +359,7 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
             emailIntent.setType("text/plain");
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, exportFileName);
             emailIntent.putExtra(Intent.EXTRA_TEXT, "See attached");
-            String filePath = context.getFileStreamPath(exportFileName).getAbsolutePath();
+            String filePath = exportFile.getAbsolutePath();
             if (BuildConfig.DEBUG) Log.w(TAG, "Output file path is" + filePath);
             emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content:" + filePath));
 

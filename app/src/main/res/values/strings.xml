@@ -11,6 +11,7 @@
     <string name="promptDirection">Direction</string>
     <string name="promptBoats">Number of boats</string>
     <string name="promptWidebeam">Widebeam</string>
+    <string name="promptExport">Select start date for export of records</string>
     <string name="deleteRecordWarning">Are you sure that want to delete record:\n</string>
     <string name="deleteRecord">Delete Record</string>
     <integer-array name="max_days_in_month">
