@@ -249,7 +249,7 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
 
 
             Context context = getApplicationContext();
-            exportFile = new File(context.getCacheDir(),exportFileName);
+            exportFile = new File(context.getExternalCacheDir(),exportFileName);
 
             Boolean noRecordsToExport = true;
 
@@ -291,7 +291,7 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
         // Gets rid of any old CSV files that might lying around
         // gets the file directory
         Context context = getApplicationContext();
-        File fileDirectory = new File(context.getCacheDir().getAbsolutePath());
+        File fileDirectory = new File(context.getExternalCacheDir().getAbsolutePath());
 
         // lists all the files into an array
         File[] dirFiles = fileDirectory.listFiles();
