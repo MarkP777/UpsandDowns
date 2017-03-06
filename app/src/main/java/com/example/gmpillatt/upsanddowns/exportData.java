@@ -365,7 +365,8 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
             emailIntent.putExtra(Intent.EXTRA_TEXT, "See attached");
             String filePath = exportFile.getAbsolutePath();
             if (BuildConfig.DEBUG) Log.w(TAG, "Output file path is" + filePath);
-            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content:" + filePath));
+            //emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content:" + filePath));
+            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:" + filePath));
 
             //Redisplay the selection screen. Hide the spinner
             progressBarLayout.setVisibility(View.GONE);

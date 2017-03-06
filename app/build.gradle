@@ -7,7 +7,7 @@ android {
         applicationId "com.example.gmpillatt.upsanddowns"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 8
+        versionCode 9
         versionName "0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
