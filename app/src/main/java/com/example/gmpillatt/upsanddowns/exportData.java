@@ -277,8 +277,12 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
                 outputStream.write(outputString.getBytes());
             }
 
+            //close file and cursor
             outputStream.close();
             c.close();
+
+            //Set the output file to readable by all
+            exportFile.setReadable(true,false);
 
         } catch (Exception e) {
             if (BuildConfig.DEBUG) Log.w(TAG, "Error in file output");
