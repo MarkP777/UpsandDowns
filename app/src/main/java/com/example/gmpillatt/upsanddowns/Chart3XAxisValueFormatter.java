@@ -20,8 +20,8 @@ public class Chart3XAxisValueFormatter implements IAxisValueFormatter {
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
         // "value" represents the position of the label on the axis (x or y)
-        if (BuildConfig.DEBUG)
-            Log.w("formatter", String.format("%1$.1f", value));
+        //if (BuildConfig.DEBUG)
+        //    Log.w("formatter", String.format("%1$.1f", value));
 
         //MP Hack. Added the next two lines to stop trying to access array out of bounds
         if (value < 0) {

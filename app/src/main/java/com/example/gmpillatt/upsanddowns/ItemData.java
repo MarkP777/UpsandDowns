@@ -44,15 +44,15 @@ public class ItemData {
     }
     */
 
-    public String getLeft(){
+    public String getLeft() {
         return this.left;
     }
 
-    public String getRight(){
+    public String getRight() {
         return this.right;
     }
 
-    public String getCentre(){
+    public String getCentre() {
         return this.centre;
     }
 
@@ -63,10 +63,6 @@ public class ItemData {
     public Integer getdBId() {
         return this.dBId;
     }
-
-
-
-
 
 
 }

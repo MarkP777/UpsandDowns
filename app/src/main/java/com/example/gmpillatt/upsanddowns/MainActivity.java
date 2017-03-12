@@ -22,23 +22,21 @@ public class MainActivity extends AppCompatActivity {
     public TextView textDowns;
     private Integer userChoice;
 
-    public static final String EXTRA_USERSELECTION="UserSelection";
+    public static final String EXTRA_USERSELECTION = "UserSelection";
 
-    String upDown=" ";
-    Integer count=0;
+    String upDown = " ";
+    Integer count = 0;
     Cursor c;
-    String timestamp=" ";
+    String timestamp = " ";
     DBHelperClass dBHelper = new DBHelperClass(this);
     SQLiteDatabase db;
-
-
-
-    //final Intent intent = new Intent(MainActivity.this, ConfirmUpsDowns.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (BuildConfig.DEBUG) Log.w(TAG, "Started");
+        //if (BuildConfig.DEBUG) Log.w(TAG, "Started");
+
+        //Home page. 4 large buttons and up/down counts
         setContentView(R.layout.activity_main);
 
         //Initialise TextView
@@ -48,16 +46,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        if (BuildConfig.DEBUG) Log.w(TAG, "onClick Button pressed " + view.getId());
+
+        //if (BuildConfig.DEBUG) Log.w(TAG, "onClick Button pressed " + view.getId());
+
+        //Pass the id of the button pressed as EXTRA
         Intent intent = new Intent(MainActivity.this, ConfirmUpsDowns.class);
-        intent.putExtra(ConfirmUpsDowns.EXTRA_USERCHOICE, (int)view.getId());
-        //setUserChoice(view.getId());
-        startActivityForResult(intent,3);
+        intent.putExtra(ConfirmUpsDowns.EXTRA_USERCHOICE, (int) view.getId());
+        startActivityForResult(intent, 3);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (BuildConfig.DEBUG)Log.w(TAG, "onActivityresult started");
+
+        //if (BuildConfig.DEBUG) Log.w(TAG, "onActivityresult started");
 
         //Find out where we're coming from
         /*
@@ -73,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
         9 export data
          */
         int userAction = data.getIntExtra(EXTRA_USERSELECTION, 0);
-        if (BuildConfig.DEBUG)Log.w(TAG,"onActivityResult user selection"+userAction);
+
+        //if (BuildConfig.DEBUG) Log.w(TAG, "onActivityResult user selection" + userAction);
 
         switch (userAction) {
 
@@ -81,13 +83,15 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (resultCode) {
                     case RESULT_OK: {
-                        if (BuildConfig.DEBUG)Log.w("MainActivity", "OK Count " + String.format("%1$d", count));
+                        //if (BuildConfig.DEBUG)
+                        //    Log.w("MainActivity", "OK Count " + String.format("%1$d", count));
                         writeUpsAndDowns();
                         break;
                     }
                     case RESULT_CANCELED: {
                         //Don't need to update the totals if the user cancelled, but keeping it in for the time being
-                        if (BuildConfig.DEBUG)Log.w("MainActivity", "Cancelled Count " + String.format("%1$d", count));
+                        //if (BuildConfig.DEBUG)
+                        //    Log.w("MainActivity", "Cancelled Count " + String.format("%1$d", count));
                         writeUpsAndDowns();
                         break;
                     }
@@ -101,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Don't check the result code - always OK
                 writeUpsAndDowns();
-                if (BuildConfig.DEBUG)Log.w(TAG, "Return from ListAll");
+                //if (BuildConfig.DEBUG) Log.w(TAG, "Return from ListAll");
                 break;
             }
 
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             case (9): //exportData
             {
                 //Don't check the result code - always OK
-                if (BuildConfig.DEBUG)Log.w(TAG, "Return from Chart or Export");
+                //if (BuildConfig.DEBUG) Log.w(TAG, "Return from Chart or Export");
                 break;
             }
         }
@@ -119,21 +123,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     protected void writeUpsAndDowns() {
 
         try {
 
-            if (BuildConfig.DEBUG)Log.w("WriteUpsandDowns","Started");
+            //if (BuildConfig.DEBUG)Log.w("WriteUpsandDowns","Started");
 
             db = dBHelper.getWritableDatabase();
 
-            c=db.rawQuery("SELECT upDown,SUM(numberBoats) FROM lockStats WHERE (date_Time >= date('now','start of day')) GROUP BY upDown;",null);
-
+            c = db.rawQuery("SELECT upDown,SUM(numberBoats) FROM lockStats WHERE (date_Time >= date('now','start of day')) GROUP BY upDown;", null);
 
             //Set counts. We won't get anything back from the query if there are no records
             int upCount = 0;
-            int downCount=0;
+            int downCount = 0;
 
             while (c.moveToNext()) {
 
@@ -142,27 +144,24 @@ public class MainActivity extends AppCompatActivity {
 
                 if (upDown.equals("U")) {
                     upCount = count;
-                    if (BuildConfig.DEBUG)
-                        Log.w("MainActivity", String.format("%1$d", count) + " Up");
+                    //if (BuildConfig.DEBUG)
+                    //    Log.w("MainActivity", String.format("%1$d", count) + " Up");
                 } else if (upDown.equals("D")) {
                     downCount = count;
-                    if (BuildConfig.DEBUG)
-                        Log.w("MainActivity", String.format("%1$d", count) + " Down");
+                    //if (BuildConfig.DEBUG)
+                    //    Log.w("MainActivity", String.format("%1$d", count) + " Down");
                 }
 
             }
             c.close();
-            textUps.setText(String.format("%1$d",upCount) + " Up");
-            textDowns.setText(String.format("%1$d",downCount) + " Down");
+            textUps.setText(String.format("%1$d", upCount) + " Up");
+            textDowns.setText(String.format("%1$d", downCount) + " Down");
 
+        } catch (SQLiteException e) {
 
-        }
-        catch (SQLiteException e) {
-
-            if (BuildConfig.DEBUG)Log.w("MainActivity", "Exception");
+            //if (BuildConfig.DEBUG) Log.w("MainActivity", "Exception");
 
         }
-
 
     }
 
@@ -175,30 +174,31 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         // Handle item selection
 
         Intent intent1;
 
         switch (item.getItemId()) {
             case R.id.Menu1:
-                intent1=new Intent(MainActivity.this,ListAll.class);
-                startActivityForResult(intent1,4);
+                intent1 = new Intent(MainActivity.this, ListAll.class);
+                startActivityForResult(intent1, 4);
                 return true;
             case R.id.Menu2:
-                intent1=new Intent(MainActivity.this,Chart1.class);
-                startActivityForResult(intent1,5);
+                intent1 = new Intent(MainActivity.this, Chart1.class);
+                startActivityForResult(intent1, 5);
                 return true;
             case R.id.Menu3:
-                intent1=new Intent(MainActivity.this,Chart2.class);
-                startActivityForResult(intent1,6);
+                intent1 = new Intent(MainActivity.this, Chart2.class);
+                startActivityForResult(intent1, 6);
                 return true;
             case R.id.Menu4:
-                intent1=new Intent(MainActivity.this,Chart3.class);
-                startActivityForResult(intent1,7);
+                intent1 = new Intent(MainActivity.this, Chart3.class);
+                startActivityForResult(intent1, 7);
                 return true;
             case R.id.Menu5:
-                intent1=new Intent(MainActivity.this,exportData.class);
-                startActivityForResult(intent1,9);
+                intent1 = new Intent(MainActivity.this, exportData.class);
+                startActivityForResult(intent1, 9);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

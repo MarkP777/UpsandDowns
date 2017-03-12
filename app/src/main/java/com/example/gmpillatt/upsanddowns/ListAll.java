@@ -7,11 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
 
 import java.text.SimpleDateFormat;
@@ -31,9 +29,9 @@ public class ListAll extends ListActivity {
     List<ItemData> threeColumnList = new ArrayList<>();
     ThreeColumnAdapter adapter;
 
-    int clickedRecordPosition=0;
+    int clickedRecordPosition = 0;
 
-    public static final String EXTRA_USERACTION="User action";
+    public static final String EXTRA_USERACTION = "User action";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +39,8 @@ public class ListAll extends ListActivity {
 
         //Tell the parent activity that we're doing a ListAll. Always return OK
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.EXTRA_USERSELECTION,4);
-        setResult(RESULT_OK,intent);
+        intent.putExtra(MainActivity.EXTRA_USERSELECTION, 4);
+        setResult(RESULT_OK, intent);
 
         //Fill the list of data that's going to be displayed
         fillList();
@@ -55,22 +53,22 @@ public class ListAll extends ListActivity {
 
         listView.setAdapter(adapter);
 
-            cursor.close();
+        cursor.close();
     }
 
     @Override
     public void onListItemClick(ListView listView, View itemView, int position, long id) {
 
 
-        if (BuildConfig.DEBUG) Log.w(TAG, "Clicked "+(Integer.toString(position)+" "+Long.toString(id)));
+        //if (BuildConfig.DEBUG) Log.w(TAG, "Clicked "+(Integer.toString(position)+" "+Long.toString(id)));
 
-        clickedRecordPosition=position;
+        clickedRecordPosition = position;
 
-        Intent intent=new Intent(ListAll.this, EditLock.class);
-        intent.putExtra(EditLock.EXTRA_DBID, String.format("%1$d",threeColumnList.get(position).getdBId()));
-        startActivityForResult(intent,0);
+        Intent intent = new Intent(ListAll.this, EditLock.class);
+        intent.putExtra(EditLock.EXTRA_DBID, String.format("%1$d", threeColumnList.get(position).getdBId()));
+        startActivityForResult(intent, 0);
 
-     }
+    }
 
 
     void fillList() {
@@ -78,21 +76,21 @@ public class ListAll extends ListActivity {
         String tempCol1;
         String tempCol2;
         String tempCol3;
-        Integer tempTextColor=0;
-        Integer tempDBId=0;
+        Integer tempTextColor = 0;
+        Integer tempDBId = 0;
 
-        Integer upTextColor=getResources().getColor(R.color.colorUp);
-        Integer downTextColor=getResources().getColor(R.color.colorDown);
+        Integer upTextColor = getResources().getColor(R.color.colorUp);
+        Integer downTextColor = getResources().getColor(R.color.colorDown);
 
         DBHelperClass dBHelper = new DBHelperClass(this);
         SQLiteDatabase db = dBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         Date parsedDate = new Date();
-        SimpleDateFormat dateFormatToParse=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat dateFormatOutput=new SimpleDateFormat("HH:mm EEE dd/MM");
+        SimpleDateFormat dateFormatToParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormatOutput = new SimpleDateFormat("HH:mm EEE dd/MM");
 
-        String widebeamFlag="(W)";
+        String widebeamFlag = "(W)";
 
         //Make sure that the list is clear before we start adding to it
         threeColumnList.clear();
@@ -122,8 +120,8 @@ public class ListAll extends ListActivity {
                     "date_Time DESC, _ID DESC"                                 // The sort order
             );
 
+        } catch (SQLiteException e) {
         }
-        catch (SQLiteException e) {}
 
 
         //Work through the cursor, which will have been set to the beginning by the query
@@ -135,11 +133,6 @@ public class ListAll extends ListActivity {
             }
 
             tempDBId = cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema._ID));
-/*
-            tempCol1 = String.format("%1$d",cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema._ID)))
-                    + " "
-                    + dateFormatOutput.format(parsedDate);
-*/
 
             tempCol1 = dateFormatOutput.format(parsedDate);
 
@@ -169,9 +162,8 @@ public class ListAll extends ListActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (BuildConfig.DEBUG) Log.w(TAG,"onActivityresultstarted");
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //if (BuildConfig.DEBUG) Log.w(TAG,"onActivityresultstarted");
 
         switch (resultCode) {
             case RESULT_OK:
@@ -179,37 +171,35 @@ public class ListAll extends ListActivity {
             {
                 //Find out what the user did
                 //TODO consider using shared preferences to pass what record is being worked on and user action
-                int userAction = data.getIntExtra(EXTRA_USERACTION,0);
+                int userAction = data.getIntExtra(EXTRA_USERACTION, 0);
 
                 switch (userAction) {
-                case 1:
-                {
-                    //Update
-                    if (BuildConfig.DEBUG) Log.w(TAG,"User action was(1): "+userAction);
-                    //Need to refresh the whole of the dataset just in case the date/time has changed
+                    case 1: {
 
-                    // thereby changing the order of records
-                    fillList();
+                        //if (BuildConfig.DEBUG) Log.w(TAG,"User action was(1): "+userAction);
 
-                    break;
+                        //Update
+                        //Need to refresh the whole of the dataset just in case the date/time has changed
+                        // thereby changing the order of records
+                        fillList();
+
+                        break;
+                    }
+
+                    case 2: {
+                        //if (BuildConfig.DEBUG) Log.w(TAG,"User action was(2): "+userAction);
+
+                        //Delete
+                        //Need to remove the item from the list
+                        threeColumnList.remove(clickedRecordPosition);
+
+
+                        break;
+
+                    }
+
+
                 }
-
-                case 2:
-                {
-                    //Delete
-                    if (BuildConfig.DEBUG) Log.w(TAG,"User action was(2): "+userAction);
-
-                    //Need to remove the item from the list
-                    threeColumnList.remove(clickedRecordPosition);
-
-
-
-                    break;
-
-                }
-
-
-            }
 
                 //Tell the adapter that the list has changed
                 adapter.notifyDataSetChanged();
@@ -226,21 +216,6 @@ public class ListAll extends ListActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
+}
 
 

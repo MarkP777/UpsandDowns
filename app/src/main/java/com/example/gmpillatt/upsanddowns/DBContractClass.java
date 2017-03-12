@@ -10,7 +10,8 @@ public final class DBContractClass {
 
     // To prevent someone from accidentally instantiating the contract class,
     // make the constructor private.
-    private DBContractClass() {}
+    private DBContractClass() {
+    }
 
     /* Inner class that defines the table contents */
     public static class DBSchema implements BaseColumns {
@@ -22,17 +23,6 @@ public final class DBContractClass {
         public static final String COLUMN_NAME_UPDOWN = "upDown";
         public static final String COLUMN_NAME_WIDEBEAM = "wideBeam";
 
-
-
-
-
-
-
     }
-
-
-
-
-
 
 }

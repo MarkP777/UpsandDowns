@@ -27,7 +27,7 @@ import java.util.List;
 
 public class Chart3 extends AppCompatActivity {
 
-    String TAG="Chart3";
+    String TAG = "Chart3";
     DBHelperClass dBHelper = new DBHelperClass(this);
     Cursor c;
     int totalCount;
@@ -52,8 +52,8 @@ public class Chart3 extends AppCompatActivity {
 
         //Tell the parent activity that we're doing a Chart3. Always return OK
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.EXTRA_USERSELECTION,7);
-        setResult(RESULT_OK,intent);
+        intent.putExtra(MainActivity.EXTRA_USERSELECTION, 7);
+        setResult(RESULT_OK, intent);
 
         setContentView(R.layout.chart1);
 
@@ -86,7 +86,7 @@ public class Chart3 extends AppCompatActivity {
 
         //Set up stuff for the chart that won't change with the data
 
-        totalBarColor=getResources().getColor(R.color.colorTotal);
+        totalBarColor = getResources().getColor(R.color.colorTotal);
 
         chart.setTouchEnabled(false);
         chart.setFitBars(true);
@@ -105,7 +105,6 @@ public class Chart3 extends AppCompatActivity {
         rightAxis.setSpaceBottom(0f);
         leftAxis.setAxisMinimum(0f);
         rightAxis.setAxisMinimum(0f);
-
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setGranularity(1f);
@@ -144,9 +143,9 @@ public class Chart3 extends AppCompatActivity {
             //Set up the X Axis label
             xAxisValues[i] = String.format("%1$02d", workingDate.get(Calendar.DAY_OF_MONTH))
                     + "/"
-                    + String.format("%1$02d", (workingDate.get(Calendar.MONTH)+1));
+                    + String.format("%1$02d", (workingDate.get(Calendar.MONTH) + 1));
 
-            workingDate.add(Calendar.DATE,-1);
+            workingDate.add(Calendar.DATE, -1);
 
         }
 
@@ -172,7 +171,7 @@ public class Chart3 extends AppCompatActivity {
 
         try {
 
-            if (BuildConfig.DEBUG) Log.w(TAG, "getTotalsByDay started");
+            //if (BuildConfig.DEBUG) Log.w(TAG, "getTotalsByDay started");
 
             SQLiteDatabase db = dBHelper.getWritableDatabase();
 
@@ -217,22 +216,21 @@ public class Chart3 extends AppCompatActivity {
 
         } catch (SQLiteException e) {
 
-            if (BuildConfig.DEBUG) Log.w(TAG, " getTotalsByDay Exception");
+            //if (BuildConfig.DEBUG) Log.w(TAG, " getTotalsByDay Exception");
 
         }
 
 
     }
 
-    public void clickPrev(View view)
-    {
+    public void clickPrev(View view) {
 
         //Disable the button until we've sorted out the chart
         prevButton.setEnabled(false);
         nextButton.setEnabled(false);
 
         //Get the data and draw the chart
-        chartDate.add(Calendar.DATE,-31);
+        chartDate.add(Calendar.DATE, -31);
         fillChartData(chartDate);
         chart.notifyDataSetChanged();
         chart.invalidate();
@@ -253,7 +251,7 @@ public class Chart3 extends AppCompatActivity {
         nextButton.setEnabled(false);
 
         //Get the data and draw the chart
-        chartDate.add(Calendar.DATE,+31);
+        chartDate.add(Calendar.DATE, +31);
         fillChartData(chartDate);
         chart.notifyDataSetChanged();
         chart.invalidate();
@@ -263,9 +261,10 @@ public class Chart3 extends AppCompatActivity {
 
         //Enable Prev button and Next provided that we're not already at today's date
         prevButton.setEnabled(true);
-        if (!chartDate.equals(todaysDate))
-        { nextButton.setEnabled(true);}
-        else
-        { nextButton.setVisibility(View.INVISIBLE); }
+        if (!chartDate.equals(todaysDate)) {
+            nextButton.setEnabled(true);
+        } else {
+            nextButton.setVisibility(View.INVISIBLE);
+        }
     }
 }

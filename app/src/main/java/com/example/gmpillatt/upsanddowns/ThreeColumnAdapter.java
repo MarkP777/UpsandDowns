@@ -13,7 +13,7 @@ import java.util.List;
  * Created by gmpillatt on 14/01/2017.
  */
 
-public class ThreeColumnAdapter extends ArrayAdapter<ItemData>{
+public class ThreeColumnAdapter extends ArrayAdapter<ItemData> {
 
     /*
     Custom adapter cribbed from http://stackoverflow.com/questions/8166497/custom-adapter-for-list-view
@@ -62,26 +62,6 @@ public class ThreeColumnAdapter extends ArrayAdapter<ItemData>{
         return view;
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

@@ -26,10 +26,10 @@ import java.util.List;
 
 public class Chart1 extends AppCompatActivity {
 
-    String TAG="Chart1";
+    String TAG = "Chart1";
     DBHelperClass dBHelper = new DBHelperClass(this);
     Cursor c;
-    int upCount,downCount;
+    int upCount, downCount;
     String[] xAxisValues = new String[11];
     BarChart chart;
     TextView chartTitle;
@@ -46,10 +46,12 @@ public class Chart1 extends AppCompatActivity {
     Calendar nextDate;
 
     // set custom bar width - just a a little bit of space between each up/down pair of bars
-    final float groupSpace = 0.20f;
+    //final float groupSpace = 0.20f;
+    final float groupSpace = 0.00f;
     final float barSpace = 0.00f; // x2 dataset
-    final float barWidth = 0.40f; // x2 dataset
-    // (0.00 + 0.40) * 2 + 0.20 = 1.00 -> interval per "group"
+    // final float barWidth = 0.40f; // x2 dataset
+    final float barWidth = 0.50f; // x2 dataset
+    // (0.00 + 0.50) * 2 + 0.00 = 1.00 -> interval per "group"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +59,8 @@ public class Chart1 extends AppCompatActivity {
 
         //Tell the parent activity that we're doing a Chart1. Always return OK
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.EXTRA_USERSELECTION,5);
-        setResult(RESULT_OK,intent);
+        intent.putExtra(MainActivity.EXTRA_USERSELECTION, 5);
+        setResult(RESULT_OK, intent);
 
         setContentView(R.layout.chart1);
 
@@ -87,7 +89,7 @@ public class Chart1 extends AppCompatActivity {
         //Disable and hide the next button, cos you can't go past today, but set up the date anyway
         nextButton.setEnabled(false);
         nextButton.setVisibility(View.INVISIBLE);
-        nextDate.add(Calendar.DATE,1);
+        nextDate.add(Calendar.DATE, 1);
 
         //Set the date for the previous button as yesterday
         prevDate.add(Calendar.DATE, -1);
@@ -95,8 +97,8 @@ public class Chart1 extends AppCompatActivity {
 
         //Set up stuff for the chart that won't change with the data
 
-        upBarColor=getResources().getColor(R.color.colorUp);
-        downBarColor=getResources().getColor(R.color.colorDown);
+        upBarColor = getResources().getColor(R.color.colorUp);
+        downBarColor = getResources().getColor(R.color.colorDown);
 
         chart.setTouchEnabled(false);
 
@@ -122,24 +124,21 @@ public class Chart1 extends AppCompatActivity {
         xAxis.setAxisMaximum(11f);
         xAxis.setLabelCount(11);
         xAxis.setValueFormatter(new Chart1XAxisValueFormatter(xAxisValues));
-        xAxis.setDrawGridLines(false);
+        xAxis.setDrawGridLines(true);
         xAxis.setCenterAxisLabels(true);
 
         //Set up the X Axis labels
         int xAxisIndex = 0;
-        for (int hour = 8; hour <= 18; hour++)
-        {
+        for (int hour = 8; hour <= 18; hour++) {
 
             if (hour <= 12) {
-                xAxisValues[xAxisIndex] = String.format("%1$d",hour);
-            }
-            else {
-                xAxisValues[xAxisIndex] = String.format("%1$d",hour-12);
+                xAxisValues[xAxisIndex] = String.format("%1$d", hour);
+            } else {
+                xAxisValues[xAxisIndex] = String.format("%1$d", hour - 12);
             }
 
             xAxisIndex++;
         }
-
 
         //Get initial chart data
         fillChartData(todaysDate);
@@ -196,7 +195,7 @@ public class Chart1 extends AppCompatActivity {
 
         try {
 
-            if (BuildConfig.DEBUG) Log.w("WriteUpsandDowns", "getUpandDownsByHour");
+            //if (BuildConfig.DEBUG) Log.w("WriteUpsandDowns", "getUpandDownsByHour");
 
             SQLiteDatabase db = dBHelper.getWritableDatabase();
 
@@ -260,12 +259,12 @@ public class Chart1 extends AppCompatActivity {
 
                 if (upDown.equals("U")) {
                     upCount = count;
-                    if (BuildConfig.DEBUG)
-                        Log.w("getUpandDownsByHour", String.format("%1$d", count) + " Up");
+                    //if (BuildConfig.DEBUG)
+                    //    Log.w("getUpandDownsByHour", String.format("%1$d", count) + " Up");
                 } else if (upDown.equals("D")) {
                     downCount = count;
-                    if (BuildConfig.DEBUG)
-                        Log.w("getUpandDownsByHour", String.format("%1$d", count) + " Down");
+                    //if (BuildConfig.DEBUG)
+                    //    Log.w("getUpandDownsByHour", String.format("%1$d", count) + " Down");
                 }
 
             }
@@ -274,15 +273,14 @@ public class Chart1 extends AppCompatActivity {
 
         } catch (SQLiteException e) {
 
-            if (BuildConfig.DEBUG) Log.w("getUpandDownsByHour", "Exception");
+            //if (BuildConfig.DEBUG) Log.w("getUpandDownsByHour", "Exception");
 
         }
 
 
     }
 
-    public void clickPrev(View view)
-    {
+    public void clickPrev(View view) {
 
         //Disable the button until we've sorted out the chart
         prevButton.setEnabled(false);

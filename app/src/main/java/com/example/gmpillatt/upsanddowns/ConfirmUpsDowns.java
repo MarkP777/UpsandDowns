@@ -20,7 +20,6 @@ import static android.R.attr.id;
 public class ConfirmUpsDowns extends AppCompatActivity {
 
     private TextView textConfirm;
-    private TextView textWidebeam;
     public CheckBox checkBox;
     public boolean wideBeam;
     public static final String EXTRA_USERCHOICE= "UserChoice";
@@ -35,11 +34,10 @@ public class ConfirmUpsDowns extends AppCompatActivity {
         super.onCreate(saved);
         setContentView(R.layout.confirm_ups_downs);
 
-        if (BuildConfig.DEBUG) Log.w("Confirm","started");
+        //if (BuildConfig.DEBUG) Log.w("Confirm","started");
 
         //bind TextView
         textConfirm = (TextView) findViewById(R.id.tvChoice);
-
 
         //bind checkbox
         checkBox = (CheckBox) findViewById(R.id.cbWidebeam);
@@ -97,8 +95,6 @@ public class ConfirmUpsDowns extends AppCompatActivity {
                 }
         }
 
-
-
     }
 
 public void confirmLock(View view) {
@@ -115,11 +111,11 @@ public void confirmLock(View view) {
     try {
         SQLiteDatabase db = dBHelper.getWritableDatabase();
         long newRowId = db.insert(DBContractClass.DBSchema.TABLE_NAME, null, values);
-        if (BuildConfig.DEBUG) Log.w("Confirm","Row inserted");
+        //if (BuildConfig.DEBUG) Log.w("Confirm","Row inserted");
     }
     catch (SQLiteException e)
     {
-        if (BuildConfig.DEBUG) Log.w("Confirm", "Exception");
+        //if (BuildConfig.DEBUG) Log.w("Confirm", "Exception");
     }
 
     setResult(RESULT_OK,intent);

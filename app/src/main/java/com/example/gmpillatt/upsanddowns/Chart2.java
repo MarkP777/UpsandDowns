@@ -27,7 +27,7 @@ import java.util.List;
 
 public class Chart2 extends AppCompatActivity {
 
-    String TAG="Chart2";
+    String TAG = "Chart2";
     DBHelperClass dBHelper = new DBHelperClass(this);
     Cursor c;
     int totalCount;
@@ -37,8 +37,8 @@ public class Chart2 extends AppCompatActivity {
     Button prevButton;
     Button nextButton;
     List<BarEntry> totalEntries;
-    final String [] daysOfWeekShort = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-    final String [] daysOfWeekLong = {"Sundays","Mondays","Tuesdays","Wednesdays","Thursdays","Fridays","Saturdays"};
+    final String[] daysOfWeekShort = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+    final String[] daysOfWeekLong = {"Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"};
     final SimpleDateFormat dateFormatTitle = new SimpleDateFormat("EEE dd MMMM yy");
     final SimpleDateFormat dateFormatButton = new SimpleDateFormat("dd/MM");
     Integer totalBarColor;
@@ -57,8 +57,8 @@ public class Chart2 extends AppCompatActivity {
 
         //Tell the parent activity that we're doing a Chart2. Always return OK
         Intent intent = new Intent();
-        intent.putExtra(MainActivity.EXTRA_USERSELECTION,6);
-        setResult(RESULT_OK,intent);
+        intent.putExtra(MainActivity.EXTRA_USERSELECTION, 6);
+        setResult(RESULT_OK, intent);
 
         setContentView(R.layout.chart1);
 
@@ -78,21 +78,25 @@ public class Chart2 extends AppCompatActivity {
         todaysDay = todaysDate.get(Calendar.DAY_OF_WEEK);
 
         //Set the title
-        chartTitle.setText(daysOfWeekLong[todaysDay-1]);
+        chartTitle.setText(daysOfWeekLong[todaysDay - 1]);
 
         //Title the next button
         nextDay = (todaysDay + 1);
-        if (nextDay > 7) {nextDay = 1;}
-        nextButton.setText(daysOfWeekShort[nextDay-1]);
+        if (nextDay > 7) {
+            nextDay = 1;
+        }
+        nextButton.setText(daysOfWeekShort[nextDay - 1]);
 
         //Title the previous button
         prevDay = (todaysDay - 1);
-        if (prevDay < 1) {prevDay = 7;}
-        prevButton.setText(daysOfWeekShort[prevDay-1]);
+        if (prevDay < 1) {
+            prevDay = 7;
+        }
+        prevButton.setText(daysOfWeekShort[prevDay - 1]);
 
         //Set up stuff for the chart that won't change with the data
 
-        totalBarColor=getResources().getColor(R.color.colorTotal);
+        totalBarColor = getResources().getColor(R.color.colorTotal);
 
         chart.setTouchEnabled(false);
         chart.setFitBars(true);
@@ -137,11 +141,11 @@ public class Chart2 extends AppCompatActivity {
 
         totalEntries.clear();
 
-
         // Work backwards from today until we find the first day where the day of the week is the one we want
         workingDate.setTime(todaysDate.getTime());
-        while (workingDate.get(Calendar.DAY_OF_WEEK) != day) {workingDate.add(Calendar.DATE,-1);}
-
+        while (workingDate.get(Calendar.DAY_OF_WEEK) != day) {
+            workingDate.add(Calendar.DATE, -1);
+        }
 
         // Get 26 weeks of data working backwards
         for (int i = 25; i >= 0; i--)
@@ -155,9 +159,9 @@ public class Chart2 extends AppCompatActivity {
             //Set up the X Axis label
             xAxisValues[i] = String.format("%1$02d", workingDate.get(Calendar.DAY_OF_MONTH))
                     + "/"
-                    + String.format("%1$02d", (workingDate.get(Calendar.MONTH)+1));
+                    + String.format("%1$02d", (workingDate.get(Calendar.MONTH) + 1));
 
-            workingDate.add(Calendar.DATE,-7);
+            workingDate.add(Calendar.DATE, -7);
 
         }
 
@@ -183,7 +187,7 @@ public class Chart2 extends AppCompatActivity {
 
         try {
 
-            if (BuildConfig.DEBUG) Log.w(TAG, "getTotalsByDay started");
+            //if (BuildConfig.DEBUG) Log.w(TAG, "getTotalsByDay started");
 
             SQLiteDatabase db = dBHelper.getWritableDatabase();
 
@@ -228,15 +232,14 @@ public class Chart2 extends AppCompatActivity {
 
         } catch (SQLiteException e) {
 
-            if (BuildConfig.DEBUG) Log.w(TAG, " getTotalsByDay Exception");
+            //if (BuildConfig.DEBUG) Log.w(TAG, " getTotalsByDay Exception");
 
         }
 
 
     }
 
-    public void clickPrev(View view)
-    {
+    public void clickPrev(View view) {
 
         //Disable the button until we've sorted out the chart
         prevButton.setEnabled(false);
@@ -248,16 +251,20 @@ public class Chart2 extends AppCompatActivity {
         chart.invalidate();
 
         //set the title
-        chartTitle.setText(daysOfWeekLong[prevDay-1]);
+        chartTitle.setText(daysOfWeekLong[prevDay - 1]);
 
         //Change the date on this button and the Next. Cycle through the weekdays
         prevDay = prevDay - 1;
-        if (prevDay < 1) {prevDay = 7;}
-        prevButton.setText(daysOfWeekShort[prevDay-1]);
+        if (prevDay < 1) {
+            prevDay = 7;
+        }
+        prevButton.setText(daysOfWeekShort[prevDay - 1]);
 
         nextDay = nextDay - 1;
-        if (nextDay < 1) {nextDay = 7;}
-        nextButton.setText(daysOfWeekShort[nextDay-1]);
+        if (nextDay < 1) {
+            nextDay = 7;
+        }
+        nextButton.setText(daysOfWeekShort[nextDay - 1]);
 
         //Enable Next and Prev buttons
         prevButton.setEnabled(true);
@@ -276,16 +283,20 @@ public class Chart2 extends AppCompatActivity {
         chart.invalidate();
 
         //set the title
-        chartTitle.setText(daysOfWeekLong[nextDay-1]);
+        chartTitle.setText(daysOfWeekLong[nextDay - 1]);
 
         //Change the date on this button and the Previous. Cycle through the weekdays
         nextDay = nextDay + 1;
-        if (nextDay > 7) {nextDay = 1;}
-        nextButton.setText(daysOfWeekShort[nextDay-1]);
+        if (nextDay > 7) {
+            nextDay = 1;
+        }
+        nextButton.setText(daysOfWeekShort[nextDay - 1]);
 
         prevDay = prevDay + 1;
-        if (prevDay > 7) {prevDay = 1;}
-        prevButton.setText(daysOfWeekShort[prevDay-1]);
+        if (prevDay > 7) {
+            prevDay = 1;
+        }
+        prevButton.setText(daysOfWeekShort[prevDay - 1]);
 
         //Enable Next and Prev buttons
         prevButton.setEnabled(true);

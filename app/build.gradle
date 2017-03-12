@@ -7,13 +7,13 @@ android {
         applicationId "com.example.gmpillatt.upsanddowns"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 9
-        versionName "0.7"
+        versionCode 10
+        versionName "0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

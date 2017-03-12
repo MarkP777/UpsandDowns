@@ -18,7 +18,6 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,16 +28,12 @@ import java.util.GregorianCalendar;
  * Created by gmpillatt on 17/01/2017.
  */
 
-public class EditLock extends AppCompatActivity implements AdapterView.OnItemSelectedListener,NoticeDialogFragment.NoticeDialogListener {
+public class EditLock extends AppCompatActivity implements AdapterView.OnItemSelectedListener, NoticeDialogFragment.NoticeDialogListener {
 
     private static final String TAG = "EditLock";
     private static Cursor cursor;
 
     private int[] max_days_in_month;
-
-    private int daySpinnerId;
-    private int monthSpinnerId;
-    private int yearSpinnerId;
 
     private Spinner minsSpinner;
     private Spinner hoursSpinner;
@@ -60,55 +55,62 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
     private String[] dayValues = new String[31];
     private String[] monthValues = new String[12];
     private String[] yearValues = new String[5];
-    private String[] boatValues=new String[9];
+    private String[] boatValues = new String[9];
 
     private final int indexUp = 0;
     private final int indexDown = 1;
 
-    public static final String EXTRA_DBID= "DBId";
+    public static final String EXTRA_DBID = "DBId";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (BuildConfig.DEBUG) Log.w(TAG, "Started");
+
+        //if (BuildConfig.DEBUG) Log.w(TAG, "Started");
+
         setContentView(R.layout.edit_lock);
 
         DBHelperClass dBHelper = new DBHelperClass(this);
         SQLiteDatabase db = dBHelper.getWritableDatabase();
 
-        String[] upDownValues = new String[]{"Up","Down"};
+        String[] upDownValues = new String[]{"Up", "Down"};
 
         Date parsedDate = new Date();
-        SimpleDateFormat dateFormatToParse=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormatToParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         int counter;
 
         for (counter = 0; counter < 24; counter++) {
-            hoursValues[counter] = String.format("%1$02d",counter);
-        } ;
+            hoursValues[counter] = String.format("%1$02d", counter);
+        }
+        ;
 
         for (counter = 0; counter < 60; counter++) {
-            minsValues[counter] = String.format("%1$02d",counter);
-        } ;
+            minsValues[counter] = String.format("%1$02d", counter);
+        }
+        ;
 
         for (counter = 0; counter < 31; counter++) {
-            dayValues[counter] = String.format("%1$02d",counter + 1);
-        } ;
+            dayValues[counter] = String.format("%1$02d", counter + 1);
+        }
+        ;
 
         for (counter = 0; counter < 12; counter++) {
-            monthValues[counter] = String.format("%1$02d",counter + 1);
-        } ;
+            monthValues[counter] = String.format("%1$02d", counter + 1);
+        }
+        ;
 
         for (counter = 0; counter < 5; counter++) {
-            yearValues[counter] = String.format("%1$d",counter + 2017);
-        } ;
+            yearValues[counter] = String.format("%1$d", counter + 2017);
+        }
+        ;
 
         for (counter = 0; counter < 9; counter++) {
-            boatValues[counter] = String.format("%1$d",counter + 1);
+            boatValues[counter] = String.format("%1$d", counter + 1);
         }
 
-        Resources res=getResources();
+        Resources res = getResources();
         max_days_in_month = res.getIntArray(R.array.max_days_in_month);
 
         daySpinner = (Spinner) findViewById(R.id.spinner);
@@ -117,32 +119,32 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         minsSpinner = (Spinner) findViewById(R.id.spinner7);
         hoursSpinner = (Spinner) findViewById(R.id.spinner6);
         upDownSpinner = (Spinner) findViewById(R.id.spinner4);
-        boatsSpinner  = (Spinner) findViewById(R.id.spinner5);
+        boatsSpinner = (Spinner) findViewById(R.id.spinner5);
         dayOfWeekTextView = (TextView) findViewById(R.id.textView9);
         widebeamCheckbox = (CheckBox) findViewById(R.id.cbWidebeam);
 
         ArrayAdapter<String> dayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,dayValues);
+                android.R.layout.simple_spinner_item, dayValues);
 
         ArrayAdapter<String> monthAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,monthValues);
+                android.R.layout.simple_spinner_item, monthValues);
 
         ArrayAdapter<String> yearAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,yearValues);
+                android.R.layout.simple_spinner_item, yearValues);
 
         ArrayAdapter<String> minsAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,minsValues);
+                android.R.layout.simple_spinner_item, minsValues);
 
         ArrayAdapter<String> hoursAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,hoursValues);
+                android.R.layout.simple_spinner_item, hoursValues);
 
         ArrayAdapter<String> upDownAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,upDownValues);
+                android.R.layout.simple_spinner_item, upDownValues);
 
         ArrayAdapter<String> boatsAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,boatValues);
+                android.R.layout.simple_spinner_item, boatValues);
 
-// Specify the layout to use when the list of choices appears
+        // Specify the layout to use when the list of choices appears
         dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -151,8 +153,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         upDownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         boatsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-
-// Apply the adapters to the spinner
+        // Apply the adapters to the spinner
         daySpinner.setAdapter(dayAdapter);
         monthSpinner.setAdapter(monthAdapter);
         yearSpinner.setAdapter(yearAdapter);
@@ -163,16 +164,11 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
         widebeamCheckbox = (CheckBox) findViewById(R.id.cbELWidebeam);
 
-// Get the ids of the date spinners because we'll need these to validate the correct date
-        daySpinnerId=daySpinner.getId();
-        monthSpinnerId=monthSpinner.getId();
-        yearSpinnerId=yearSpinner.getId();
-
-//Define projection for DB query
+        //Define projection for DB query
         dBIdString = (String) getIntent().getExtras().get(EXTRA_DBID);
         dBIdInt = Integer.valueOf(dBIdString);
 
-        if (BuildConfig.DEBUG) Log.w(TAG,"DB id: "+dBIdString);
+        //if (BuildConfig.DEBUG) Log.w(TAG,"DB id: "+dBIdString);
 
         String[] projection = {
                 DBContractClass.DBSchema._ID,
@@ -186,12 +182,12 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         //Wrap DB work in a try/catch
         try {
 
-            cursor = db.query(DBContractClass.DBSchema.TABLE_NAME, projection, "_id= ?", new String [] {dBIdString}, null, null, null);
+            cursor = db.query(DBContractClass.DBSchema.TABLE_NAME, projection, "_id= ?", new String[]{dBIdString}, null, null, null);
 
             cursor.moveToFirst();
 
+        } catch (SQLiteException e) {
         }
-        catch (SQLiteException e) {}
 
         //Unwrap the data and display and save it
 
@@ -212,11 +208,11 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
         recordString = cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT)) + getString(R.string.separator);
 
-        recordString = recordString + (String) DateFormat.format("yyyy-MM-dd HH:mm",parsedDate)+getString(R.string.separator);
+        recordString = recordString + (String) DateFormat.format("yyyy-MM-dd HH:mm", parsedDate) + getString(R.string.separator);
 
-        daySpinner.setSelection(day-1);
+        daySpinner.setSelection(day - 1);
         monthSpinner.setSelection(month);
-        yearSpinner.setSelection(year-2017);
+        yearSpinner.setSelection(year - 2017);
         hoursSpinner.setSelection(hour);
         minsSpinner.setSelection(minute);
         dayOfWeekTextView.setText(dayOfTheWeek);
@@ -227,45 +223,46 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
         recordString = recordString + direction + getString(R.string.separator);
 
-        if (direction.equals("U"))
-            {upDownSpinner.setSelection(indexUp);}
-        else
-            {upDownSpinner.setSelection(indexDown);}
+        if (direction.equals("U")) {
+            upDownSpinner.setSelection(indexUp);
+        } else {
+            upDownSpinner.setSelection(indexDown);
+        }
 
         //Number of boats
         int boats = cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS));
 
-        recordString = recordString + String.format("%1$d",boats) + getString(R.string.separator);
+        recordString = recordString + String.format("%1$d", boats) + getString(R.string.separator);
 
-        boatsSpinner.setSelection(boats-1);
+        boatsSpinner.setSelection(boats - 1);
 
         //Widebeam
         String widebeam = cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM));
 
         recordString = recordString + widebeam;
 
-        if (widebeam.equals("W"))
-        {widebeamCheckbox.setChecked(true);}
-        else
-        {widebeamCheckbox.setChecked(false);}
+        if (widebeam.equals("W")) {
+            widebeamCheckbox.setChecked(true);
+        } else {
+            widebeamCheckbox.setChecked(false);
+        }
 
         cursor.close();
 
 
-// Set listeners for the date spinners so that we can validate on the fly
+        // Set listeners for the date spinners so that we can validate on the fly
         daySpinner.setOnItemSelectedListener(this);
         monthSpinner.setOnItemSelectedListener(this);
         yearSpinner.setOnItemSelectedListener(this);
 
     }
 
-    public void confirmUpdate(View view)
-    {
+    public void confirmUpdate(View view) {
         try {
             DBHelperClass dBHelper = new DBHelperClass(this);
             SQLiteDatabase db = dBHelper.getWritableDatabase();
 
-            if (BuildConfig.DEBUG) Log.w(TAG, "confirmUpdate started");
+            //if (BuildConfig.DEBUG) Log.w(TAG, "confirmUpdate started");
 
             //User wants to update the record
 
@@ -306,59 +303,38 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
             //TODO Look at the where clause
             db.update(DBContractClass.DBSchema.TABLE_NAME, values, "_id=" + dBIdString, null);
 
+        } catch (SQLiteException e) {
         }
-        catch (SQLiteException e) {}
 
 
         //Tell the parent activity that the user updated a record
         Intent intent = new Intent();
-        intent.putExtra(ListAll.EXTRA_USERACTION,1);
-        setResult(RESULT_OK,intent);
+        intent.putExtra(ListAll.EXTRA_USERACTION, 1);
+        setResult(RESULT_OK, intent);
 
         finish();
     }
 
-    public void deleteRecord(View view)
-    {
+    public void deleteRecord(View view) {
 
-        if (BuildConfig.DEBUG) Log.w(TAG,"User ask for delete - confirmation required");
+        //if (BuildConfig.DEBUG) Log.w(TAG, "User ask for delete - confirmation required");
 
         //Ask user for confirmation. All other processing depends on a positive response
         showNoticeDialog();
 
-/*
-        try {
-            DBHelperClass dBHelper = new DBHelperClass(this);
-            SQLiteDatabase db = dBHelper.getWritableDatabase();
-
-            if (BuildConfig.DEBUG) Log.w(TAG, "deleteRecord started");
-
-            db.delete(DBContractClass.DBSchema.TABLE_NAME, "_id= ?", new String[]{dBIdString});
-        }
-        catch (SQLiteException e) {}
-
-
-        //Tell the parent activity that the user deleted a record
-        Intent intent = new Intent();
-        intent.putExtra(ListAll.EXTRA_USERACTION,2);
-        setResult(RESULT_OK,intent);
-
-        finish();
-*/
     }
 
     public void showNoticeDialog() {
+
         // Create an instance of the dialog fragment and show it
 
-        //FragmentManager fm = getFragmentManager();
         DialogFragment dialog = new NoticeDialogFragment();
 
         Bundle args = new Bundle();
-        args.putString("recordDetails",recordString);
+        args.putString("recordDetails", recordString);
         dialog.setArguments(args);
         dialog.show(getSupportFragmentManager(), "NoticeDialogFragment");
     }
-
 
 
     // The dialog fragment receives a reference to this Activity through the
@@ -366,24 +342,26 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
     // defined by the NoticeDialogFragment.NoticeDialogListener interface
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        // User touched the dialog's positive button
-        if (BuildConfig.DEBUG) Log.w(TAG,"Returned positive from alert dialog");
 
-            try {
+        //if (BuildConfig.DEBUG) Log.w(TAG,"Returned positive from alert dialog");
+
+        // User touched the dialog's positive button
+
+        try {
             DBHelperClass dBHelper = new DBHelperClass(this);
             SQLiteDatabase db = dBHelper.getWritableDatabase();
 
-            if (BuildConfig.DEBUG) Log.w(TAG, "deleteRecord started");
+            //if (BuildConfig.DEBUG) Log.w(TAG, "deleteRecord started");
 
             db.delete(DBContractClass.DBSchema.TABLE_NAME, "_id= ?", new String[]{dBIdString});
+        } catch (SQLiteException e) {
         }
-        catch (SQLiteException e) {}
 
 
         //Tell the parent activity that the user deleted a record
         Intent intent = new Intent();
-        intent.putExtra(ListAll.EXTRA_USERACTION,2);
-        setResult(RESULT_OK,intent);
+        intent.putExtra(ListAll.EXTRA_USERACTION, 2);
+        setResult(RESULT_OK, intent);
 
         finish();
 
@@ -392,52 +370,50 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+
         // User touched the dialog's negative button - there isn't one so we really shouldn't get here
-        if (BuildConfig.DEBUG) Log.w(TAG,"In alert cancel dialog");
+
+        //if (BuildConfig.DEBUG) Log.w(TAG,"In alert cancel dialog");
     }
-
-
-
 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        // Showing selected spinner item
-        if (BuildConfig.DEBUG) Log.w(TAG, "Spinner "+parent.getId()+ "Selected: "
+        /*
+        if (BuildConfig.DEBUG) Log.w(TAG, "Spinner " + parent.getId() + "Selected: "
                 + daySpinner.getSelectedItemPosition() + " "
                 + monthSpinner.getSelectedItemPosition() + " "
                 + yearSpinner.getSelectedItemPosition());
+        */
 
         // need to mess about with logic if days exceed max days in month and reset with daySpinner.setSelection(x);
 
         if (monthSpinner.getSelectedItemPosition() != 1) // Month is not February
         {
-            if ((daySpinner.getSelectedItemPosition()+1) > max_days_in_month[monthSpinner.getSelectedItemPosition()])
+            if ((daySpinner.getSelectedItemPosition() + 1) > max_days_in_month[monthSpinner.getSelectedItemPosition()])
 
-            {daySpinner.setSelection(max_days_in_month[monthSpinner.getSelectedItemPosition()]-1);}
+            {
+                daySpinner.setSelection(max_days_in_month[monthSpinner.getSelectedItemPosition()] - 1);
+            }
+        } else if (((yearSpinner.getSelectedItemPosition() + 2017) % 4) == 0) // Leap year
+        {
+            if ((daySpinner.getSelectedItemPosition() + 1) > max_days_in_month[monthSpinner.getSelectedItemPosition()])
+
+            {
+                daySpinner.setSelection(max_days_in_month[monthSpinner.getSelectedItemPosition()] - 1);
+            }
+        } else // Not a leap year
+        {
+            if ((daySpinner.getSelectedItemPosition() + 1) > (max_days_in_month[monthSpinner.getSelectedItemPosition()] - 1))
+
+            {
+                daySpinner.setSelection(max_days_in_month[monthSpinner.getSelectedItemPosition()] - 2);
+            }
         }
 
-        else
-            if (((yearSpinner.getSelectedItemPosition()+2017)%4)==0) // Leap year
-            {
-                if ((daySpinner.getSelectedItemPosition() + 1) > max_days_in_month[monthSpinner.getSelectedItemPosition()])
-
-                {
-                    daySpinner.setSelection(max_days_in_month[monthSpinner.getSelectedItemPosition()] - 1);
-                }
-            }
-            else // Not a leap year
-            {
-                if ((daySpinner.getSelectedItemPosition() + 1) > (max_days_in_month[monthSpinner.getSelectedItemPosition()]-1))
-
-                {
-                    daySpinner.setSelection(max_days_in_month[monthSpinner.getSelectedItemPosition()] - 2);
-                }
-            }
-
         //Reconstruct the date and then get and display the day of the week. Note that months start at 0 as per the spinner positions
-        Calendar newCalendar = new GregorianCalendar(yearSpinner.getSelectedItemPosition()+2017, monthSpinner.getSelectedItemPosition(), daySpinner.getSelectedItemPosition()+1);
+        Calendar newCalendar = new GregorianCalendar(yearSpinner.getSelectedItemPosition() + 2017, monthSpinner.getSelectedItemPosition(), daySpinner.getSelectedItemPosition() + 1);
         Date newDate = newCalendar.getTime();
         dayOfWeekTextView.setText((String) DateFormat.format("EEE", newDate));
     }
@@ -446,11 +422,6 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
     }
-
-
-
-
-
 
 }
 
