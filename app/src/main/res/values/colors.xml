@@ -8,4 +8,5 @@
     <color name="colorTotal">#d500f9</color>
     <color name="colorConfirm">#00c853</color>
     <color name="colorDelete">#d50000</color>
+    <color name="colorNav">#d6d7d7</color>
 </resources>

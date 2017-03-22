@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnUpDownConfirm"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:background="@color/colorConfirm"
+        android:background="@drawable/button_confirm"
         android:onClick="confirmLock"
         android:textSize="24sp"/>
 

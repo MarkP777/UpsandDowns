@@ -24,7 +24,7 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:textSize="30sp"
         android:textAllCaps="false"
-        android:background="@color/colorUp"
+        android:background="@drawable/button_up"
         android:onClick="onClick" />
 
     <Button
@@ -38,7 +38,7 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:textSize="30sp"
         android:textAllCaps="false"
-        android:background="@color/colorDown"
+        android:background="@drawable/button_down"
         android:onClick="onClick" />
 
     <Button
@@ -51,7 +51,7 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:textSize="30sp"
         android:textAllCaps="false"
-        android:background="@color/colorDown"
+        android:background="@drawable/button_down"
         android:onClick="onClick" />
 
     <TextView
@@ -76,7 +76,7 @@
         android:layout_alignParentStart="true"
         android:textSize="30sp"
         android:textAllCaps="false"
-        android:background="@color/colorUp"
+        android:background="@drawable/button_up"
         android:onClick="onClick" />
 
     <TextView
