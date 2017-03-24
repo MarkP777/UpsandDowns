@@ -24,7 +24,7 @@ public class DBHelperClass extends SQLiteOpenHelper {
             "CREATE TABLE " + DBContractClass.DBSchema.TABLE_NAME + " (" +
                     DBContractClass.DBSchema._ID + " INTEGER PRIMARY KEY autoincrement," +
                     DBContractClass.DBSchema.COLUMN_NAME_FLIGHT + " TEXT," +
-                    DBContractClass.DBSchema.COLUMN_NAME_DATETIME + " DATETIME DEFAULT CURRENT_TIMESTAMP," +
+                    DBContractClass.DBSchema.COLUMN_NAME_DATETIME + " DATETIME," +
                     DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS + " INTEGER," +
                     DBContractClass.DBSchema.COLUMN_NAME_UPDOWN + " TEXT," +
                     DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM + " TEXT)";

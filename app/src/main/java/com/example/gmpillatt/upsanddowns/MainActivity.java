@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static com.example.gmpillatt.upsanddowns.BuildConfig.DEBUG;
 
 public class MainActivity extends AppCompatActivity {
@@ -131,7 +134,25 @@ public class MainActivity extends AppCompatActivity {
 
             db = dBHelper.getWritableDatabase();
 
-            c = db.rawQuery("SELECT upDown,SUM(numberBoats) FROM lockStats WHERE (date_Time >= date('now','start of day')) GROUP BY upDown;", null);
+            //Construct the where clause
+            String lowerBound;
+            String upperBound;
+
+            lowerBound = "datetime('"
+                    + dateTimeNow()
+                    + "','start of day')";
+
+            upperBound = "datetime('"
+                    + dateTimeNow()
+                    + "','+1 day','start of day')";
+
+            String queryString = "SELECT upDown,SUM(numberBoats) FROM lockStats WHERE (date_Time >="
+                    + lowerBound
+                    + ") AND (date_Time <"
+                    + upperBound
+                    + ") GROUP BY upDown;";
+
+            c = db.rawQuery(queryString, null);
 
             //Set counts. We won't get anything back from the query if there are no records
             int upCount = 0;
@@ -163,6 +184,18 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    String dateTimeNow() {
+
+        SimpleDateFormat dateFormatOutput = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
+        Date justNow = new Date();
+
+        String returnString = dateFormatOutput.format(justNow);
+
+        //if (BuildConfig.DEBUG) Log.w("MainActivity","Today's date: "+returnString);
+
+        return returnString;
     }
 
     @Override

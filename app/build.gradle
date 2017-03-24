@@ -4,11 +4,11 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "com.example.gmpillatt.upsanddowns"
+        applicationId "com.gmpillatt.upsanddowns"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 11
-        versionName "0.9"
+        versionCode 12
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

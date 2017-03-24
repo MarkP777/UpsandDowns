@@ -11,6 +11,9 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static android.R.attr.id;
 
 /**
@@ -44,9 +47,6 @@ public class ConfirmUpsDowns extends AppCompatActivity {
 
         //initialise wideBeam
         wideBeam = false;
-
-        //set the flight
-        values.put(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT, "S3L");
 
         //Tell the parent activity that we've been into confirmUpsDowns
         //Set the result as Cancelled. This will be reset to successful if the user confirms
@@ -97,8 +97,21 @@ public class ConfirmUpsDowns extends AppCompatActivity {
 
     }
 
+    String dateTimeNow() {
+
+        SimpleDateFormat dateFormatOutput = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
+        Date justNow = new Date();
+
+        String returnString = dateFormatOutput.format(justNow);
+
+        //if (BuildConfig.DEBUG) Log.w("Confirm lock","Today's date: "+returnString);
+
+        return returnString;
+    }
+
 public void confirmLock(View view) {
 
+    //Set the widebeam flag "W" or "N"
     if (checkBox.isChecked())
     {
         values.put(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM, "W");
@@ -107,6 +120,10 @@ public void confirmLock(View view) {
     {
         values.put(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM, "N");
     }
+
+    //Set the flight and current time
+    values.put(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT, "S3L");
+    values.put(DBContractClass.DBSchema.COLUMN_NAME_DATETIME,dateTimeNow());
 
     try {
         SQLiteDatabase db = dBHelper.getWritableDatabase();
