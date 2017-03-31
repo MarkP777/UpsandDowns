@@ -171,18 +171,18 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         //if (BuildConfig.DEBUG) Log.w(TAG,"DB id: "+dBIdString);
 
         String[] projection = {
-                DBContractClass.DBSchema._ID,
-                DBContractClass.DBSchema.COLUMN_NAME_FLIGHT,
-                DBContractClass.DBSchema.COLUMN_NAME_DATETIME,
-                DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS,
-                DBContractClass.DBSchema.COLUMN_NAME_UPDOWN,
-                DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM
+                DBContractClass.LSSchema._ID,
+                DBContractClass.LSSchema.COLUMN_NAME_FLIGHT,
+                DBContractClass.LSSchema.COLUMN_NAME_DATETIME,
+                DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS,
+                DBContractClass.LSSchema.COLUMN_NAME_UPDOWN,
+                DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM
         };
 
         //Wrap DB work in a try/catch
         try {
 
-            cursor = db.query(DBContractClass.DBSchema.TABLE_NAME, projection, "_id= ?", new String[]{dBIdString}, null, null, null);
+            cursor = db.query(DBContractClass.LSSchema.TABLE_NAME, projection, "_id= ?", new String[]{dBIdString}, null, null, null);
 
             cursor.moveToFirst();
 
@@ -193,7 +193,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
         //Date and time
         try {
-            parsedDate = dateFormatToParse.parse(cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_DATETIME)));
+            parsedDate = dateFormatToParse.parse(cursor.getString(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_DATETIME)));
         } catch (Exception parseException) {
         }
 
@@ -206,7 +206,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         int minute = c.get(Calendar.MINUTE);
         String dayOfTheWeek = (String) DateFormat.format("EEE", parsedDate);
 
-        recordString = cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT)) + getString(R.string.separator);
+        recordString = cursor.getString(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_FLIGHT)) + getString(R.string.separator);
 
         recordString = recordString + (String) DateFormat.format("yyyy-MM-dd HH:mm", parsedDate) + getString(R.string.separator);
 
@@ -219,7 +219,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
         // Direction
 
-        String direction = cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN));
+        String direction = cursor.getString(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN));
 
         recordString = recordString + direction + getString(R.string.separator);
 
@@ -230,14 +230,14 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         }
 
         //Number of boats
-        int boats = cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS));
+        int boats = cursor.getInt(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS));
 
         recordString = recordString + String.format("%1$d", boats) + getString(R.string.separator);
 
         boatsSpinner.setSelection(boats - 1);
 
         //Widebeam
-        String widebeam = cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM));
+        String widebeam = cursor.getString(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM));
 
         recordString = recordString + widebeam;
 
@@ -269,13 +269,13 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
             ContentValues values = new ContentValues();
 
             //
-            values.put(DBContractClass.DBSchema._ID, dBIdInt);
+            values.put(DBContractClass.LSSchema._ID, dBIdInt);
 
             //set the flight
-            values.put(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT, "S3L");
+            values.put(DBContractClass.LSSchema.COLUMN_NAME_FLIGHT, "S3L");
 
             //set the date and time
-            values.put(DBContractClass.DBSchema.COLUMN_NAME_DATETIME,
+            values.put(DBContractClass.LSSchema.COLUMN_NAME_DATETIME,
                     yearSpinner.getSelectedItem() + "-" +
                             monthSpinner.getSelectedItem() + "-" +
                             daySpinner.getSelectedItem() + " " +
@@ -284,24 +284,24 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
             //Set the direction
             if (upDownSpinner.getSelectedItemPosition() == indexUp) {
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "U");
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN, "U");
             } else {
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "D");
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN, "D");
             }
 
             //Set the number of boats
-            values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, Integer.valueOf((String) boatsSpinner.getSelectedItem()));
+            values.put(DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS, Integer.valueOf((String) boatsSpinner.getSelectedItem()));
 
             //Set the widebeam flag
             if (widebeamCheckbox.isChecked()) {
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM, "W");
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM, "W");
             } else {
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM, "N");
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM, "N");
             }
 
             //Update the database
             //TODO Look at the where clause
-            db.update(DBContractClass.DBSchema.TABLE_NAME, values, "_id=" + dBIdString, null);
+            db.update(DBContractClass.LSSchema.TABLE_NAME, values, "_id=" + dBIdString, null);
 
         } catch (SQLiteException e) {
         }
@@ -353,7 +353,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
 
             //if (BuildConfig.DEBUG) Log.w(TAG, "deleteRecord started");
 
-            db.delete(DBContractClass.DBSchema.TABLE_NAME, "_id= ?", new String[]{dBIdString});
+            db.delete(DBContractClass.LSSchema.TABLE_NAME, "_id= ?", new String[]{dBIdString});
         } catch (SQLiteException e) {
         }
 

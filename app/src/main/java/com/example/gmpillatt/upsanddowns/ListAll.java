@@ -97,12 +97,12 @@ public class ListAll extends ListActivity {
 
         //Define projection for DB query
         String[] projection = {
-                DBContractClass.DBSchema._ID,
-                DBContractClass.DBSchema.COLUMN_NAME_FLIGHT,
-                DBContractClass.DBSchema.COLUMN_NAME_DATETIME,
-                DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS,
-                DBContractClass.DBSchema.COLUMN_NAME_UPDOWN,
-                DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM
+                DBContractClass.LSSchema._ID,
+                DBContractClass.LSSchema.COLUMN_NAME_FLIGHT,
+                DBContractClass.LSSchema.COLUMN_NAME_DATETIME,
+                DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS,
+                DBContractClass.LSSchema.COLUMN_NAME_UPDOWN,
+                DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM
         };
 
         //Wrap DB work in a try/catch
@@ -111,7 +111,7 @@ public class ListAll extends ListActivity {
             //Query the db. This will reset the cursor position to the start
             //Note that we should perhaps pass a string array for the sort order, but I doubt if it really matters
             cursor = db.query(
-                    DBContractClass.DBSchema.TABLE_NAME,                     // The table to query
+                    DBContractClass.LSSchema.TABLE_NAME,                     // The table to query
                     projection,                               // The columns to return
                     null,                                // The columns for the WHERE clause
                     null,                            // The values for the WHERE clause
@@ -128,26 +128,26 @@ public class ListAll extends ListActivity {
         while (cursor.moveToNext()) {
 
             try {
-                parsedDate = dateFormatToParse.parse(cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_DATETIME)));
+                parsedDate = dateFormatToParse.parse(cursor.getString(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_DATETIME)));
             } catch (Exception parseException) {
             }
 
-            tempDBId = cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema._ID));
+            tempDBId = cursor.getInt(cursor.getColumnIndex(DBContractClass.LSSchema._ID));
 
             tempCol1 = dateFormatOutput.format(parsedDate);
 
-            if (cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN)).equals("U")) {
+            if (cursor.getString(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN)).equals("U")) {
                 tempCol2 = "Up";
                 tempTextColor = upTextColor;
-            } else if (cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN)).equals("D")) {
+            } else if (cursor.getString(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN)).equals("D")) {
                 tempCol2 = "Down";
                 tempTextColor = downTextColor;
             } else {
                 tempCol2 = " ";
             }
 
-            tempCol3 = String.format("%1$d", cursor.getInt(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS)));
-            if (cursor.getString(cursor.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM)).equals("W")) {
+            tempCol3 = String.format("%1$d", cursor.getInt(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS)));
+            if (cursor.getString(cursor.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM)).equals("W")) {
                 tempCol3 = tempCol3 + widebeamFlag;
             }
 

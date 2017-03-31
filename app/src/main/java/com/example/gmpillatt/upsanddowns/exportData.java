@@ -209,12 +209,12 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
 
         //Define projection for DB query
         String[] projection = {
-                DBContractClass.DBSchema._ID,
-                DBContractClass.DBSchema.COLUMN_NAME_FLIGHT,
-                DBContractClass.DBSchema.COLUMN_NAME_DATETIME,
-                DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS,
-                DBContractClass.DBSchema.COLUMN_NAME_UPDOWN,
-                DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM
+                DBContractClass.LSSchema._ID,
+                DBContractClass.LSSchema.COLUMN_NAME_FLIGHT,
+                DBContractClass.LSSchema.COLUMN_NAME_DATETIME,
+                DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS,
+                DBContractClass.LSSchema.COLUMN_NAME_UPDOWN,
+                DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM
         };
 
         //Wrap DB and file work in a try/catch
@@ -222,7 +222,7 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
 
             //Query the db. This will reset the cursor position to the start
             c = db.query(
-                    DBContractClass.DBSchema.TABLE_NAME,                     // The table to query
+                    DBContractClass.LSSchema.TABLE_NAME,                     // The table to query
                     projection,                               // The columns to return
                     whereClause,                                // The columns for the WHERE clause
                     null,                            // The values for the WHERE clause
@@ -250,11 +250,11 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
 
             while (c.moveToNext()) {
 
-                outputString = c.getString(c.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT)) + fieldSeparator
-                        + c.getString(c.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_DATETIME)) + fieldSeparator
-                        + c.getString(c.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN)) + fieldSeparator
-                        + String.format("%1$d", c.getInt(c.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS))) + fieldSeparator
-                        + c.getString(c.getColumnIndex(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM)) + endOfRecord;
+                outputString = c.getString(c.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_FLIGHT)) + fieldSeparator
+                        + c.getString(c.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_DATETIME)) + fieldSeparator
+                        + c.getString(c.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN)) + fieldSeparator
+                        + String.format("%1$d", c.getInt(c.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS))) + fieldSeparator
+                        + c.getString(c.getColumnIndex(DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM)) + endOfRecord;
 
                 outputStream.write(outputString.getBytes());
 

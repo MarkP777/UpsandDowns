@@ -61,8 +61,8 @@ public class ConfirmUpsDowns extends AppCompatActivity {
                 textConfirm.setTextColor(getResources().getColor(R.color.colorUp));
                 textConfirm.setText(getString(R.string.str1Up));
                 checkBox.setVisibility(View.VISIBLE);
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, 1);
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "U");
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS, 1);
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN, "U");
                 break;
             }
 
@@ -70,8 +70,8 @@ public class ConfirmUpsDowns extends AppCompatActivity {
                 textConfirm.setTextColor(getResources().getColor(R.color.colorUp));
                 textConfirm.setText(getString(R.string.str2Up));
                 checkBox.setVisibility(View.INVISIBLE);
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, 2);
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "U");
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS, 2);
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN, "U");
                 break;
                 }
 
@@ -80,8 +80,8 @@ public class ConfirmUpsDowns extends AppCompatActivity {
                 textConfirm.setTextColor(getResources().getColor(R.color.colorDown));
                 textConfirm.setText(getString(R.string.str1Down));
                 checkBox.setVisibility(View.VISIBLE);
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, 1);
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "D");
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS, 1);
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN, "D");
                 break;
                 }
 
@@ -89,8 +89,8 @@ public class ConfirmUpsDowns extends AppCompatActivity {
                 textConfirm.setTextColor(getResources().getColor(R.color.colorDown));
                 textConfirm.setText(getString(R.string.str2Down));
                 checkBox.setVisibility(View.INVISIBLE);
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_NUMBERBOATS, 2);
-                values.put(DBContractClass.DBSchema.COLUMN_NAME_UPDOWN, "D");
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_NUMBERBOATS, 2);
+                values.put(DBContractClass.LSSchema.COLUMN_NAME_UPDOWN, "D");
                 break;
                 }
         }
@@ -114,20 +114,20 @@ public void confirmLock(View view) {
     //Set the widebeam flag "W" or "N"
     if (checkBox.isChecked())
     {
-        values.put(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM, "W");
+        values.put(DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM, "W");
     }
     else
     {
-        values.put(DBContractClass.DBSchema.COLUMN_NAME_WIDEBEAM, "N");
+        values.put(DBContractClass.LSSchema.COLUMN_NAME_WIDEBEAM, "N");
     }
 
     //Set the flight and current time
-    values.put(DBContractClass.DBSchema.COLUMN_NAME_FLIGHT, "S3L");
-    values.put(DBContractClass.DBSchema.COLUMN_NAME_DATETIME,dateTimeNow());
+    values.put(DBContractClass.LSSchema.COLUMN_NAME_FLIGHT, "S3L");
+    values.put(DBContractClass.LSSchema.COLUMN_NAME_DATETIME,dateTimeNow());
 
     try {
         SQLiteDatabase db = dBHelper.getWritableDatabase();
-        long newRowId = db.insert(DBContractClass.DBSchema.TABLE_NAME, null, values);
+        long newRowId = db.insert(DBContractClass.LSSchema.TABLE_NAME, null, values);
         //if (BuildConfig.DEBUG) Log.w("Confirm","Row inserted");
     }
     catch (SQLiteException e)

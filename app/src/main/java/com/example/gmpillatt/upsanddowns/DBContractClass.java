@@ -13,8 +13,8 @@ public final class DBContractClass {
     private DBContractClass() {
     }
 
-    /* Inner class that defines the table contents */
-    public static class DBSchema implements BaseColumns {
+    /* Inner class that defines the table contents for lock stats */
+    public static class LSSchema implements BaseColumns {
 
         public static final String TABLE_NAME = "lockStats";
         public static final String COLUMN_NAME_FLIGHT = "flight";
@@ -25,4 +25,10 @@ public final class DBContractClass {
 
     }
 
+    /* Inner class that defines the table contents for preferences */
+    public static class PrefSchema implements BaseColumns {
+
+        public static final String TABLE_NAME = "Preferences";
+        public static final String COLUMN_NAME_HOMEFLIGHT = "homeFlight";
+    }
 }
