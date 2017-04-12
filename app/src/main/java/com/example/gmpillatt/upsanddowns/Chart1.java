@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import static java.lang.Float.NaN;
+
 public class Chart1 extends AppCompatActivity {
 
     String TAG = "Chart1";
@@ -35,8 +39,7 @@ public class Chart1 extends AppCompatActivity {
     TextView chartTitle;
     Button prevButton;
     Button nextButton;
-    List<BarEntry> upEntries;
-    List<BarEntry> downEntries;
+    List<BarEntry> totalEntries;
     final SimpleDateFormat dateFormatTitle = new SimpleDateFormat("EEEE\ndd MMMM yyyy");
     final SimpleDateFormat dateFormatButton = new SimpleDateFormat("dd/MM");
     Integer upBarColor;
@@ -45,13 +48,13 @@ public class Chart1 extends AppCompatActivity {
     Calendar prevDate;
     Calendar nextDate;
 
-    // set custom bar width - just a a little bit of space between each up/down pair of bars
+    // set custom bar width - just a a little bit of space between each bar
     //final float groupSpace = 0.20f;
     final float groupSpace = 0.00f;
-    final float barSpace = 0.00f; // x2 dataset
+    final float barSpace = 0.05f;
     // final float barWidth = 0.40f; // x2 dataset
-    final float barWidth = 0.50f; // x2 dataset
-    // (0.00 + 0.50) * 2 + 0.00 = 1.00 -> interval per "group"
+    final float barWidth = 0.95f;
+    // (0.00 + 0.50) * 2 + 0.00 = 1.00 -> interval per "group" (if grouped)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +76,7 @@ public class Chart1 extends AppCompatActivity {
         chart = (BarChart) findViewById(R.id.chart1);
 
         //Initialise lists to hold our data
-        upEntries = new ArrayList<>();
-        downEntries = new ArrayList<>();
+        totalEntries = new ArrayList<>();
 
         //initialise dates
         todaysDate = Calendar.getInstance();
@@ -101,9 +103,18 @@ public class Chart1 extends AppCompatActivity {
         downBarColor = getResources().getColor(R.color.colorDown);
 
         chart.setTouchEnabled(false);
-
         chart.setDescription(null);
 
+        //Set up custom legend
+        List <LegendEntry> legendEntries;
+        legendEntries = new ArrayList<>();
+        legendEntries.add(0,new LegendEntry("Downs",Legend.LegendForm.DEFAULT,Float.NaN,Float.NaN,null,downBarColor));
+        legendEntries.add(1,new LegendEntry("Ups",Legend.LegendForm.DEFAULT,Float.NaN,Float.NaN,null,upBarColor));
+
+        //Display custom legend
+        Legend legend = chart.getLegend();
+        legend.setCustom(legendEntries);
+        legend.setEnabled(true);
 
         YAxis leftAxis = chart.getAxisLeft();
         YAxis rightAxis = chart.getAxisRight();
@@ -120,12 +131,12 @@ public class Chart1 extends AppCompatActivity {
         XAxis xAxis = chart.getXAxis();
         xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setAxisMinimum(0f);
-        xAxis.setAxisMaximum(11f);
+        xAxis.setAxisMinimum(-0.5f);
+        xAxis.setAxisMaximum(10.5f);
         xAxis.setLabelCount(11);
         xAxis.setValueFormatter(new Chart1XAxisValueFormatter(xAxisValues));
-        xAxis.setDrawGridLines(true);
-        xAxis.setCenterAxisLabels(true);
+        xAxis.setDrawGridLines(false);
+        xAxis.setCenterAxisLabels(false);
 
         //Set up the X Axis labels
         int xAxisIndex = 0;
@@ -152,8 +163,7 @@ public class Chart1 extends AppCompatActivity {
 
         int xAxisIndex = 0;
 
-        upEntries.clear();
-        downEntries.clear();
+        totalEntries.clear();
 
         for (int hour = 8; hour <= 18; hour++)
 
@@ -161,8 +171,7 @@ public class Chart1 extends AppCompatActivity {
 
             getUpandDownsByHour(date, hour);
 
-            upEntries.add(new BarEntry(xAxisIndex, upCount));
-            downEntries.add(new BarEntry(xAxisIndex, downCount));
+            totalEntries.add(new BarEntry(xAxisIndex, new float [] {downCount, upCount}));
 
             //We'd need to set the xAxisValues here if they weren't static: xAxisValues[xAxisIndex] = blah
 
@@ -171,20 +180,15 @@ public class Chart1 extends AppCompatActivity {
         }
 
         //TODO review whether this new is correct
-        BarDataSet upSet = new BarDataSet(upEntries, "Ups"); // add entries to dataset
-        BarDataSet downSet = new BarDataSet(downEntries, "Downs"); // add entries to dataset
+        BarDataSet totalSet = new BarDataSet(totalEntries, "Totals"); // add entries to dataset
 
-        upSet.setColor(upBarColor);
-        downSet.setColor(downBarColor);
+        totalSet.setColors(new int [] {downBarColor,upBarColor});
 
-        upSet.setDrawValues(false);
-        downSet.setDrawValues(false);
+        totalSet.setDrawValues(false);
 
-        BarData data = new BarData(upSet, downSet);
+        BarData data = new BarData(totalSet);
         data.setBarWidth(barWidth); // set the width of each bar
         chart.setData(data);
-
-        chart.groupBars(0f, groupSpace, barSpace);
 
     }
 

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -30,7 +31,7 @@ public class Chart2 extends AppCompatActivity {
     String TAG = "Chart2";
     DBHelperClass dBHelper = new DBHelperClass(this);
     Cursor c;
-    int totalCount;
+    int upCount, downCount;
     String[] xAxisValues = new String[26];
     BarChart chart;
     TextView chartTitle;
@@ -41,7 +42,8 @@ public class Chart2 extends AppCompatActivity {
     final String[] daysOfWeekLong = {"Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"};
     final SimpleDateFormat dateFormatTitle = new SimpleDateFormat("EEE dd MMMM yy");
     final SimpleDateFormat dateFormatButton = new SimpleDateFormat("dd/MM");
-    Integer totalBarColor;
+    Integer upBarColor;
+    Integer downBarColor;
     Calendar todaysDate;
     int todaysDay;
     int prevDay;
@@ -96,14 +98,23 @@ public class Chart2 extends AppCompatActivity {
 
         //Set up stuff for the chart that won't change with the data
 
-        totalBarColor = getResources().getColor(R.color.colorTotal);
+        downBarColor = getResources().getColor(R.color.colorDown);
+        upBarColor = getResources().getColor(R.color.colorUp);
 
         chart.setTouchEnabled(false);
         chart.setFitBars(true);
         chart.setDescription(null);
-        Legend legend = chart.getLegend();
-        legend.setEnabled(false);
 
+        //Set up custom legend
+        List <LegendEntry> legendEntries;
+        legendEntries = new ArrayList<>();
+        legendEntries.add(0,new LegendEntry("Downs",Legend.LegendForm.DEFAULT,Float.NaN,Float.NaN,null,downBarColor));
+        legendEntries.add(1,new LegendEntry("Ups",Legend.LegendForm.DEFAULT,Float.NaN,Float.NaN,null,upBarColor));
+
+        //Display custom legend
+        Legend legend = chart.getLegend();
+        legend.setCustom(legendEntries);
+        legend.setEnabled(true);
 
         YAxis leftAxis = chart.getAxisLeft();
         YAxis rightAxis = chart.getAxisRight();
@@ -154,7 +165,7 @@ public class Chart2 extends AppCompatActivity {
 
             getTotalsByDay(workingDate);
 
-            totalEntries.add(new BarEntry(i, totalCount));
+            totalEntries.add(new BarEntry(i, new float [] {downCount, upCount}));
 
             //Set up the X Axis label
             xAxisValues[i] = String.format("%1$02d", workingDate.get(Calendar.DAY_OF_MONTH))
@@ -170,7 +181,7 @@ public class Chart2 extends AppCompatActivity {
         BarDataSet totalSet = new BarDataSet(totalEntries, "Totals"); // add entries to dataset
 
 
-        totalSet.setColor(totalBarColor);
+        totalSet.setColors(new int [] {downBarColor,upBarColor});
 
         totalSet.setDrawValues(false);
 
@@ -209,24 +220,33 @@ public class Chart2 extends AppCompatActivity {
                     + "','+1 day','start of day')";
 
 
-            String queryString = "SELECT SUM(numberBoats) FROM lockStats WHERE (date_Time >="
+            String queryString = "SELECT upDown, SUM(numberBoats) FROM lockStats WHERE (date_Time >="
                     + lowerBound
                     + ") AND (date_Time <"
                     + upperBound
-                    + ");";
+                    + ") GROUP BY upDown;";
 
 
             c = db.rawQuery(queryString, null);
 
 
             //Set count. We won't get anything back from the query if there are no records
-            totalCount = 0;
+            upCount = 0;
+            downCount = 0;
 
             while (c.moveToNext()) {
 
-                totalCount = c.getInt(0);
+                String upDown = c.getString(0);
+                count = c.getInt(1);
+
+                if (upDown.equals("U")) {
+                    upCount = count;
+                } else if (upDown.equals("D")) {
+                    downCount = count;
+                }
 
             }
+
             c.close();
 
 
