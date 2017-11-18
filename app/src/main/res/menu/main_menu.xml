@@ -11,4 +11,6 @@
         android:id="@+id/Menu4" />
     <item android:title="Export data"
         android:id="@+id/Menu5" />
+    <item android:title="Import data"
+        android:id="@+id/Menu6" />
 </menu>

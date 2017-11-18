@@ -27,6 +27,7 @@
         <activity android:name=".Chart2"/>
         <activity android:name=".Chart3" />
         <activity android:name=".exportData"/>
+        <activity android:name=".importData"/>
     </application>
 
 </manifest>

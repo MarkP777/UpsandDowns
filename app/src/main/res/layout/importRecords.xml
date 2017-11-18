@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/importProgressBarLayout"
+        android:visibility="gone">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            style="@android:style/Widget.ProgressBar.Large.Inverse"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/importDataLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        android:visibility="visible"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewImport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="@string/promptImport"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textViewImportNoFile"
+            android:layout_below="@+id/textViewImport"
+            android:layout_marginTop="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/importNoFileFound"
+            android:visibility="gone"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textStyle="normal|bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp" />
+
+
+        <Button
+            android:id="@+id/importConfirm"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/button_confirm"
+            android:onClick="confirmImportData"
+            android:text="Import data" />
+
+    </LinearLayout>
+</LinearLayout>

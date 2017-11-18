@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             case (4): // List all
+            case (10): // importData
             {
 
                 //Don't check the result code - always OK
@@ -232,6 +233,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.Menu5:
                 intent1 = new Intent(MainActivity.this, exportData.class);
                 startActivityForResult(intent1, 9);
+                return true;
+            case R.id.Menu6:
+                intent1 = new Intent(MainActivity.this, importData.class);
+                startActivityForResult(intent1, 10);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

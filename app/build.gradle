@@ -7,8 +7,8 @@ android {
         applicationId "com.gmp.android.upsanddowns"
         minSdkVersion 10
         targetSdkVersion 25
-        versionCode 15
-        versionName "1.3.0"
+        versionCode 16
+        versionName "1.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
