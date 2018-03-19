@@ -24,9 +24,12 @@ import com.github.mikephil.charting.data.BarEntry;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static java.lang.Float.NaN;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.YEAR;
 
 public class Chart1 extends AppCompatActivity {
 
@@ -47,6 +50,8 @@ public class Chart1 extends AppCompatActivity {
     Calendar todaysDate;
     Calendar prevDate;
     Calendar nextDate;
+    Calendar currentDate;
+    Boolean noMoreRecords;
 
     // set custom bar width - just a a little bit of space between each bar
     //final float groupSpace = 0.20f;
@@ -84,18 +89,27 @@ public class Chart1 extends AppCompatActivity {
         prevDate.setTime(todaysDate.getTime());
         nextDate = Calendar.getInstance();
         nextDate.setTime(todaysDate.getTime());
+        currentDate = Calendar.getInstance();
+        currentDate.setTime(todaysDate.getTime());
+        noMoreRecords = false;
 
         //Set the title
         chartTitle.setText(dateFormatTitle.format(todaysDate.getTime()));
 
-        //Disable and hide the next button, cos you can't go past today, but set up the date anyway
+        //Disable and hide the next button, cos you can't go past today
         nextButton.setEnabled(false);
         nextButton.setVisibility(View.INVISIBLE);
-        nextDate.add(Calendar.DATE, 1);
 
-        //Set the date for the previous button as yesterday
-        prevDate.add(Calendar.DATE, -1);
-        prevButton.setText(dateFormatButton.format(prevDate.getTime()));
+        //Find the date for the Previous button
+        getPrevDate();
+        if (!noMoreRecords) {
+            prevButton.setText(dateFormatButton.format(prevDate.getTime()));
+            prevButton.setEnabled(true);
+            prevButton.setVisibility(View.VISIBLE);
+        } else {
+            prevButton.setText("");
+            prevButton.setVisibility(View.INVISIBLE);
+        }
 
         //Set up stuff for the chart that won't change with the data
 
@@ -106,10 +120,10 @@ public class Chart1 extends AppCompatActivity {
         chart.setDescription(null);
 
         //Set up custom legend
-        List <LegendEntry> legendEntries;
+        List<LegendEntry> legendEntries;
         legendEntries = new ArrayList<>();
-        legendEntries.add(0,new LegendEntry("Downs",Legend.LegendForm.DEFAULT,Float.NaN,Float.NaN,null,downBarColor));
-        legendEntries.add(1,new LegendEntry("Ups",Legend.LegendForm.DEFAULT,Float.NaN,Float.NaN,null,upBarColor));
+        legendEntries.add(0, new LegendEntry("Downs", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, downBarColor));
+        legendEntries.add(1, new LegendEntry("Ups", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, upBarColor));
 
         //Display custom legend
         Legend legend = chart.getLegend();
@@ -152,7 +166,7 @@ public class Chart1 extends AppCompatActivity {
         }
 
         //Get initial chart data
-        fillChartData(todaysDate);
+        fillChartData(currentDate);
 
         //Display the chart
         chart.invalidate(); // refresh
@@ -171,7 +185,7 @@ public class Chart1 extends AppCompatActivity {
 
             getUpandDownsByHour(date, hour);
 
-            totalEntries.add(new BarEntry(xAxisIndex, new float [] {downCount, upCount}));
+            totalEntries.add(new BarEntry(xAxisIndex, new float[]{downCount, upCount}));
 
             //We'd need to set the xAxisValues here if they weren't static: xAxisValues[xAxisIndex] = blah
 
@@ -182,7 +196,7 @@ public class Chart1 extends AppCompatActivity {
         //TODO review whether this new is correct
         BarDataSet totalSet = new BarDataSet(totalEntries, "Totals"); // add entries to dataset
 
-        totalSet.setColors(new int [] {downBarColor,upBarColor});
+        totalSet.setColors(new int[]{downBarColor, upBarColor});
 
         totalSet.setDrawValues(false);
 
@@ -284,6 +298,111 @@ public class Chart1 extends AppCompatActivity {
 
     }
 
+    private void getPrevDate() {
+
+        Date parsedDate = new Date();
+        SimpleDateFormat dateFormatToParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+
+            //if (BuildConfig.DEBUG) Log.w("Chart1", "getPrevDate");
+
+            SQLiteDatabase db = dBHelper.getWritableDatabase();
+
+            //Construct the date part of the query
+            SimpleDateFormat dateFormatOutput = new SimpleDateFormat("yyyy-MM-dd");
+
+
+            //Find some test data
+            //String dateString="2016-02-12";
+
+            String dateString = dateFormatOutput.format(currentDate.getTime());
+
+            String queryString = "SELECT date_Time FROM lockStats WHERE (date_Time < datetime('" + dateString + "','start of day')) ORDER BY date_Time DESC LIMIT 1;";
+
+            c = db.rawQuery(queryString, null);
+
+            String prevDateString = "";
+
+            noMoreRecords = true;
+
+            while (c.moveToNext()) {
+
+                prevDateString = c.getString(0);
+                noMoreRecords = false;
+
+            }
+            c.close();
+
+            if (!noMoreRecords) {
+                try {
+                    parsedDate = dateFormatToParse.parse(prevDateString);
+                } catch (Exception parseException) {
+                }
+                prevDate.setTime(parsedDate);
+            }
+
+        } catch (SQLiteException e) {
+
+            //if (BuildConfig.DEBUG) Log.w("getPrevDate", "Exception");
+
+        }
+
+    }
+
+    private void getNextDate() {
+
+        Date parsedDate = new Date();
+        SimpleDateFormat dateFormatToParse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+
+            //if (BuildConfig.DEBUG) Log.w("Chart1", "getNextDate");
+
+            SQLiteDatabase db = dBHelper.getWritableDatabase();
+
+            //Construct the date part of the query
+            SimpleDateFormat dateFormatOutput = new SimpleDateFormat("yyyy-MM-dd");
+
+
+            //Find some test data
+            //String dateString="2016-02-12";
+
+            String dateString = dateFormatOutput.format(currentDate.getTime());
+
+            String queryString = "SELECT date_Time FROM lockStats WHERE (date_Time >= datetime('" + dateString + "','start of day','+1 day')) ORDER BY date_Time ASC LIMIT 1;";
+
+            c = db.rawQuery(queryString, null);
+
+            String nextDateString = "";
+
+            noMoreRecords = true;
+
+            while (c.moveToNext()) {
+
+                nextDateString = c.getString(0);
+                noMoreRecords = false;
+
+            }
+            c.close();
+
+            if (!noMoreRecords) {
+                try {
+                    parsedDate = dateFormatToParse.parse(nextDateString);
+                } catch (Exception parseException) {
+                }
+                nextDate.setTime(parsedDate);
+            }
+
+        } catch (SQLiteException e) {
+
+            //if (BuildConfig.DEBUG) Log.w("getPrevDate", "Exception");
+
+        }
+
+    }
+
+
     public void clickPrev(View view) {
 
         //Disable the button until we've sorted out the chart
@@ -298,17 +417,26 @@ public class Chart1 extends AppCompatActivity {
         //set the title
         chartTitle.setText(dateFormatTitle.format(prevDate.getTime()));
 
-        //Change the date on this button and the Next. No validation. User can go back as far as they wish
-        prevDate.add(Calendar.DATE, -1);
-        prevButton.setText(dateFormatButton.format(prevDate.getTime()));
-
-        nextDate.add(Calendar.DATE, -1);
-        nextButton.setText(dateFormatButton.format(nextDate.getTime()));
-
-        //Enable Next and Prev buttons
-        prevButton.setEnabled(true);
+        //next date becomes the former current date
+        nextDate.setTime(currentDate.getTime());
+        nextButton.setText(dateFormatButton.format(currentDate.getTime()));
         nextButton.setEnabled(true);
         nextButton.setVisibility(View.VISIBLE);
+
+        //current date becomes the former previous date
+        currentDate.setTime(prevDate.getTime());
+
+        //get the next oldest date for the new previous date
+        getPrevDate();
+        if (!noMoreRecords) {
+            prevButton.setText(dateFormatButton.format(prevDate.getTime()));
+            prevButton.setEnabled(true);
+            prevButton.setVisibility(View.VISIBLE);
+        } else {
+            prevButton.setText("");
+            prevButton.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     public void clickNext(View view) {
@@ -324,20 +452,49 @@ public class Chart1 extends AppCompatActivity {
         //set the title
         chartTitle.setText(dateFormatTitle.format(nextDate.getTime()));
 
-        //Change the date on the previous button
-        prevDate.add(Calendar.DATE, +1);
-        prevButton.setText(dateFormatButton.format(prevDate.getTime()));
+        //previous date becomes the former current date
+        prevDate.setTime(currentDate.getTime());
+        prevButton.setText(dateFormatButton.format(currentDate.getTime()));
         prevButton.setEnabled(true);
+        prevButton.setVisibility(View.VISIBLE);
 
-        //Sort out the next button. Blank, disabled and invisible if it's today
-        nextDate.add(Calendar.DATE, +1);
-        if (!nextDate.after(todaysDate)) {
+        //set the Current date to the former Next date
+        currentDate.setTime(nextDate.getTime());
+
+        //get the next newest date for the new next date. If there are no later records but the current date is before today, set it to today
+        getNextDate();
+        if (!noMoreRecords) {
             nextButton.setText(dateFormatButton.format(nextDate.getTime()));
             nextButton.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+        } else if (dateIsBefore(currentDate,todaysDate)) {
+            nextDate.setTime(todaysDate.getTime());
+            nextButton.setText(dateFormatButton.format(nextDate.getTime()));
+            nextButton.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
         } else {
             nextButton.setText("");
             nextButton.setVisibility(View.INVISIBLE);
         }
 
     }
+
+    private boolean dateIsBefore(Calendar date1, Calendar date2) {
+
+        String date1String = String.format("%1$04d", date1.get(Calendar.YEAR))
+                + String.format("%1$02d", date1.get(Calendar.MONTH))
+                + String.format("%1$02d", date1.get(Calendar.DAY_OF_MONTH));
+
+        String date2String = String.format("%1$04d", date2.get(Calendar.YEAR))
+                + String.format("%1$02d", date2.get(Calendar.MONTH))
+                + String.format("%1$02d", date2.get(Calendar.DAY_OF_MONTH));
+
+        if (date1String.compareTo(date2String) < 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }
