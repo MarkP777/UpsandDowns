@@ -129,6 +129,7 @@ public void confirmLock(View view) {
         SQLiteDatabase db = dBHelper.getWritableDatabase();
         long newRowId = db.insert(DBContractClass.LSSchema.TABLE_NAME, null, values);
         //if (BuildConfig.DEBUG) Log.w("Confirm","Row inserted");
+        db.close();
     }
     catch (SQLiteException e)
     {

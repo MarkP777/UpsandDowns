@@ -248,6 +248,7 @@ public class Chart2 extends AppCompatActivity {
             }
 
             c.close();
+            db.close();
 
 
         } catch (SQLiteException e) {

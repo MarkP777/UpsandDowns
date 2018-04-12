@@ -157,6 +157,7 @@ public class ListAll extends ListActivity {
 
         //Close the cursor
         cursor.close();
+        db.close();
 
     }
 

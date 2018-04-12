@@ -248,6 +248,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         }
 
         cursor.close();
+        db.close();
 
 
         // Set listeners for the date spinners so that we can validate on the fly
@@ -303,6 +304,8 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
             //TODO Look at the where clause
             db.update(DBContractClass.LSSchema.TABLE_NAME, values, "_id=" + dBIdString, null);
 
+            db.close();
+
         } catch (SQLiteException e) {
         }
 
@@ -354,6 +357,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
             //if (BuildConfig.DEBUG) Log.w(TAG, "deleteRecord started");
 
             db.delete(DBContractClass.LSSchema.TABLE_NAME, "_id= ?", new String[]{dBIdString});
+            db.close();
         } catch (SQLiteException e) {
         }
 

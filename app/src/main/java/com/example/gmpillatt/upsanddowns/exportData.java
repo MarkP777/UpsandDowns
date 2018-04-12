@@ -269,6 +269,7 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
             //close file and cursor
             outputStream.close();
             c.close();
+            db.close();
 
             //Set the output file to readable by all
             exportFile.setReadable(true, false);

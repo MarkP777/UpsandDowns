@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
             c.close();
+            db.close();
             textUps.setText(String.format("%1$d", upCount) + " Up");
             textDowns.setText(String.format("%1$d", downCount) + " Down");
 

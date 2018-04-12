@@ -52,6 +52,10 @@ public class Chart1 extends AppCompatActivity {
     Calendar nextDate;
     Calendar currentDate;
     Boolean noMoreRecords;
+    LegendEntry downLegendEntry;
+    LegendEntry upLegendEntry;
+    List<LegendEntry> legendEntries;
+
 
     // set custom bar width - just a a little bit of space between each bar
     //final float groupSpace = 0.20f;
@@ -96,6 +100,9 @@ public class Chart1 extends AppCompatActivity {
         //Set the title
         chartTitle.setText(dateFormatTitle.format(todaysDate.getTime()));
 
+        //Get the current day's totals in readiness for initialising the chart legend
+        getUpAndDownsByDay(currentDate);
+
         //Disable and hide the next button, cos you can't go past today
         nextButton.setEnabled(false);
         nextButton.setVisibility(View.INVISIBLE);
@@ -120,10 +127,11 @@ public class Chart1 extends AppCompatActivity {
         chart.setDescription(null);
 
         //Set up custom legend
-        List<LegendEntry> legendEntries;
+        downLegendEntry = new LegendEntry(("Downs (" + String.format("%1$d",downCount) + ")"), Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, downBarColor);
+        upLegendEntry = new LegendEntry(("Ups (" + String.format("%1$d",upCount) + ")"), Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, upBarColor);
         legendEntries = new ArrayList<>();
-        legendEntries.add(0, new LegendEntry("Downs", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, downBarColor));
-        legendEntries.add(1, new LegendEntry("Ups", Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, upBarColor));
+        legendEntries.add(0, downLegendEntry);
+        legendEntries.add(1, upLegendEntry);
 
         //Display custom legend
         Legend legend = chart.getLegend();
@@ -183,7 +191,7 @@ public class Chart1 extends AppCompatActivity {
 
         {
 
-            getUpandDownsByHour(date, hour);
+            getUpAndDownsByHour(date, hour);
 
             totalEntries.add(new BarEntry(xAxisIndex, new float[]{downCount, upCount}));
 
@@ -207,7 +215,7 @@ public class Chart1 extends AppCompatActivity {
     }
 
 
-    protected void getUpandDownsByHour(Calendar date, int hour) {
+    protected void getUpAndDownsByHour(Calendar date, int hour) {
 
         int count;
 
@@ -287,6 +295,7 @@ public class Chart1 extends AppCompatActivity {
 
             }
             c.close();
+            db.close();
 
 
         } catch (SQLiteException e) {
@@ -297,6 +306,83 @@ public class Chart1 extends AppCompatActivity {
 
 
     }
+
+
+    protected void getUpAndDownsByDay(Calendar date) {
+
+        int count;
+
+        try {
+
+            //if (BuildConfig.DEBUG) Log.w("WriteUpsandDowns", "getUpandDownsByHour");
+
+            SQLiteDatabase db = dBHelper.getWritableDatabase();
+
+            //Construct the date part of the query
+            SimpleDateFormat dateFormatOutput = new SimpleDateFormat("yyyy-MM-dd");
+
+
+            //Find some test data
+            //String dateString="2017-02-12";
+
+            String dateString = dateFormatOutput.format(date.getTime());
+
+            //Construct the where clause
+            String lowerBound;
+            String upperBound;
+
+            lowerBound = "datetime('"
+                    + dateString
+                    + "','start of day')";
+
+            upperBound = "datetime('"
+                    + dateString
+                    + "','+1 day','start of day')";
+
+            String queryString = "SELECT upDown,SUM(numberBoats) FROM lockStats WHERE (date_Time >="
+                    + lowerBound
+                    + ") AND (date_Time <"
+                    + upperBound
+                    + ") GROUP BY upDown;";
+
+            c = db.rawQuery(queryString, null);
+
+
+            //Set counts. We won't get anything back from the query if there are no records
+            upCount = 0;
+            downCount = 0;
+
+            while (c.moveToNext()) {
+
+
+                String upDown = c.getString(0);
+                count = c.getInt(1);
+
+                if (upDown.equals("U")) {
+                    upCount = count;
+                    //if (BuildConfig.DEBUG)
+                    //    Log.w("getUpandDownsByHour", String.format("%1$d", count) + " Up");
+                } else if (upDown.equals("D")) {
+                    downCount = count;
+                    //if (BuildConfig.DEBUG)
+                    //    Log.w("getUpandDownsByHour", String.format("%1$d", count) + " Down");
+                }
+
+            }
+            c.close();
+            db.close();
+
+
+        } catch (SQLiteException e) {
+
+            //if (BuildConfig.DEBUG) Log.w("getUpandDownsByHour", "Exception");
+
+        }
+
+
+    }
+
+
 
     private void getPrevDate() {
 
@@ -333,6 +419,7 @@ public class Chart1 extends AppCompatActivity {
 
             }
             c.close();
+            db.close();
 
             if (!noMoreRecords) {
                 try {
@@ -385,6 +472,7 @@ public class Chart1 extends AppCompatActivity {
 
             }
             c.close();
+            db.close();
 
             if (!noMoreRecords) {
                 try {
@@ -411,6 +499,15 @@ public class Chart1 extends AppCompatActivity {
 
         //Get the data and draw the chart
         fillChartData(prevDate);
+
+        //Set the total number of boats in the legend
+        getUpAndDownsByDay(prevDate);
+        upLegendEntry.label = "Ups (" + String.format("%1$d",upCount) + ")";
+        legendEntries.set(0,upLegendEntry);
+        downLegendEntry.label = "Downs (" + String.format("%1$d",downCount) + ")";
+        legendEntries.set(0,upLegendEntry);
+
+        //Redraw the chart
         chart.notifyDataSetChanged();
         chart.invalidate();
 
@@ -444,8 +541,17 @@ public class Chart1 extends AppCompatActivity {
         prevButton.setEnabled(false);
         nextButton.setEnabled(false);
 
-        //Get the data and draw the chart
+        //Get the data
         fillChartData(nextDate);
+
+        //Set the total number of boats in the legend
+        getUpAndDownsByDay(nextDate);
+        upLegendEntry.label = "Ups (" + String.format("%1$d",upCount) + ")";
+        legendEntries.set(0,upLegendEntry);
+        downLegendEntry.label = "Downs (" + String.format("%1$d",downCount) + ")";
+        legendEntries.set(0,upLegendEntry);
+
+        //Redraw the chart
         chart.notifyDataSetChanged();
         chart.invalidate();
 
