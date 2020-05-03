@@ -6,6 +6,7 @@
     <string name="str2Down">2 Down</string>
     <string name="promptTime">Time</string>
     <string name="promptDate">Date</string>
+    <string name="promptTimeDate">Time and Date</string>
     <string name="separator">|</string>
     <string name="colon">:</string>
     <string name="promptDirection">Direction</string>

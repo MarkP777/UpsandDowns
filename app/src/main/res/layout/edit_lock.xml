@@ -12,7 +12,7 @@
         android:layout_marginTop="30dp">
 
         <TextView
-            android:text="@string/promptTime"
+            android:text="@string/promptTimeDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -47,7 +47,7 @@
         android:layout_marginTop="30dp">
 
         <TextView
-            android:text="@string/promptDate"
+            android:text=" "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView8"
