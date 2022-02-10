@@ -69,7 +69,7 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
 
         String[] dayValues = new String[31];
         String[] monthValues = new String[12];
-        String[] yearValues = new String[5];
+        String[] yearValues = new String[15];
 
 
         for (counter = 0; counter < 31; counter++) {
@@ -80,7 +80,7 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
             monthValues[counter] = String.format("%1$02d", counter + 1);
         }
 
-        for (counter = 0; counter < 5; counter++) {
+        for (counter = 0; counter < 15; counter++) {
             yearValues[counter] = String.format("%1$d", counter + 2017);
         }
 
@@ -379,6 +379,8 @@ public class exportData extends AppCompatActivity implements AdapterView.OnItemS
         //if (BuildConfig.DEBUG) Log.w(TAG, "onActivityresult started");
 
         //Just get out of here
+        super.onActivityResult(requestCode,resultCode,data);
+
         finish();
 
     }

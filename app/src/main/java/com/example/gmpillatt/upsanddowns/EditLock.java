@@ -55,7 +55,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
     private String[] minsValues = new String[60];
     private String[] dayValues = new String[31];
     private String[] monthValues = new String[12];
-    private String[] yearValues = new String[5];
+    private String[] yearValues = new String[15];
     private String[] boatValues = new String[9];
 
     private final int indexUp = 0;
@@ -102,7 +102,7 @@ public class EditLock extends AppCompatActivity implements AdapterView.OnItemSel
         }
         ;
 
-        for (counter = 0; counter < 5; counter++) {
+        for (counter = 0; counter < 15; counter++) {
             yearValues[counter] = String.format("%1$d", counter + 2017);
         }
         ;
